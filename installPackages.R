@@ -20,6 +20,8 @@ missingpkgs = setdiff(pkgnames, currentpkgs)
 
 if (!length(missingpkgs) == 0) {
   noquote(c("The following packages(s) failed to install: ", missingpkgs))
+} else {
+  noquote("All packages installed successfully")
 }
 
 # proprietary installation
