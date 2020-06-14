@@ -17,7 +17,7 @@ fi
 RSCRIPTPATH=~/OneDrive/git/PrinceR/inner-prince.R
 
 # R arguments
-INPUT_FILE=~/projects/rrg-ljfoster-ab/caic/PrInCE/CCPrinceR.RData
+INPUT_FILE=~/projects/rrg-ljfoster-ab/caic/PrInCE/scottdata/bn_stim.rds
 OUTPUT_DIR=~/projects/rrg-ljfoster-ab/caic/PrInCE/ppis
 CLASSIFIER="NB"
 NMODELS=10
