@@ -22,16 +22,16 @@ dataset = readRDS(args$input_file)
 # setup output filepath
 if (!dir.exists(args$output_dir))
   dir.create(args$output_dir, recursive = T)
-conditions = paste0(dataname, args$classifier, args$nmodels)
+conditions = paste(dataname, args$classifier, args$nmodels, sep = "_")
 output_filename = paste0(conditions, ".txt")
 output_file = file.path(args$output_dir, output_filename)
 
 
 # results
-results = c(args$input_file, args$classifier, args$nmodels)
+results = c(dataname, args$classifier, args$nmodels)
 
 # write out
 write(results, file = output_file)
 
 head(goldstd)
-dataset[1:5,1:5]
+dataset[[1]][1:5,1:5]
