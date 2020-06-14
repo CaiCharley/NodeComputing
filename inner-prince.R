@@ -20,13 +20,13 @@ library(tidyverse)
 # setup output filepath
 if (!dir.exists(args$output_dir))
   dir.create(args$output_dir, recursive = T)
-conditions = paste0(args$classfier, args$nmodels)
+conditions = paste0(args$classifier, args$nmodels)
 output_filename = paste0("scottppi_", conditions, ".txt")
 output_file = file.path(args$output_dir, output_filename)
 
 
 # results
-results = c(args$input_file, args$classfier, args$nmodels)
+results = c(args$input_file, args$classifier, args$nmodels)
 
 # write out
 write(results, file = output_file)
