@@ -10,8 +10,23 @@ parser$add_argument('--classifer', type = 'character', required = T)
 parser$add_argument('--nmodels', type = 'integer', required = T)
 args = parser$parse_args()
 for (arg in args) {
-   message(arg)
+  message(arg)
 }
 
-# Load libraries
-#library(PrInCE, quietly = T)
+# Load Libraries
+library(tidyverse)
+# library(PrInCE)
+
+# setup output filepath
+if (!dir.exist(args$output_dir))
+  dir.create(args$output_dir, recursive = T)
+conditions = paste0(args$classfier, args$nmodels)
+output_filename = paste0("scottppi_", conditions, ".txt")
+output_file = file.path(args$output_dir, output_filename)
+
+
+# results
+results = c(args$input_file, args$classfier, args$nmodels)
+
+# write out
+write(results, file = output_file)

@@ -8,19 +8,18 @@ cd ~/OneDrive/git/PrinceR
 
 
 if [[ -v ONCC ]]; then
-    # module load nixpkgs/16.09  
-    # module load gcc/7.3.0
-    # module load r/4.0.0
-    echo "On CC"
+    module load nixpkgs/16.09  
+    module load gcc/7.3.0
+    module load r/4.0.0
 fi
 
 # R Script Location
 RSCRIPTPATH=~/OneDrive/git/PrinceR/inner-prince.R
 
 # R arguments
-INPUT_FILE='input file'
-OUTPUT_DIR='output dir'
-CLASSIFER='classifer'
+INPUT_FILE=~/projects/rrg-ljfoster-ab/caic/PrInCE/CCPrinceR.RData
+OUTPUT_DIR=~/projects/rrg-ljfoster-ab/caic/PrInCE/ppis
+CLASSIFER=NB
 NMODELS=10
 
 Rscript $RSCRIPTPATH \
@@ -29,6 +28,6 @@ Rscript $RSCRIPTPATH \
     --classifer "$CLASSIFER" \
     --nmodels $NMODELS \
 
-# Rscript $RSCRIPTPATH --input_file "hi"
+
 
 
