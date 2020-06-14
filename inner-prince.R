@@ -18,7 +18,7 @@ library(tidyverse)
 # library(PrInCE)
 
 # setup output filepath
-if (!dir.exist(args$output_dir))
+if (!dir.exists(args$output_dir))
   dir.create(args$output_dir, recursive = T)
 conditions = paste0(args$classfier, args$nmodels)
 output_filename = paste0("scottppi_", conditions, ".txt")
