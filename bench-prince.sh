@@ -2,13 +2,16 @@
 #!/bin/bash
 
 cd ~/OneDrive/git/PrinceR
+[[ $HOSTNAME =~ "computecanada" ]] && ONCC="true" 
 
 # load R if on Compute Canada
-OS=$(lsb_release -is)
-if [ "$OS" == "CentOS" ]; then
-    module load nixpkgs/16.09  
-    module load gcc/7.3.0
-    module load r/4.0.0
+
+
+if [[ -v ONCC ]]; then
+    # module load nixpkgs/16.09  
+    # module load gcc/7.3.0
+    # module load r/4.0.0
+    echo "On CC"
 fi
 
 # R Script Location
