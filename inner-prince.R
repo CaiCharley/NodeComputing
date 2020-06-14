@@ -15,7 +15,7 @@ library(tidyverse)
 library(PrInCE)
 
 # load input files
-goldstd = readRDS(dirname(args$input_file) %>% paste0("goldstd.rds"))
+goldstd = readRDS(dirname(args$input_file) %>% paste0("/goldstd.rds"))
 dataname = gsub("\\.rds$", "", basename(args$input_file))
 dataset = readRDS(args$input_file)
 
@@ -34,4 +34,4 @@ results = c(args$input_file, args$classifier, args$nmodels)
 write(results, file = output_file)
 
 head(goldstd)
-head(dataset)
+dataset[1:5,1:5]
