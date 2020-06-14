@@ -6,7 +6,7 @@ library(argparse)
 parser = ArgumentParser()
 parser$add_argument('--input_file', type = 'character', required = T)
 parser$add_argument('--output_dir', type = 'character', required = T)
-parser$add_argument('--classifer', type = 'character', required = T)
+parser$add_argument('--classifier', type = 'character', required = T)
 parser$add_argument('--nmodels', type = 'integer', required = T)
 args = parser$parse_args()
 for (arg in args) {

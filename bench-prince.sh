@@ -19,13 +19,15 @@ RSCRIPTPATH=~/OneDrive/git/PrinceR/inner-prince.R
 # R arguments
 INPUT_FILE=~/projects/rrg-ljfoster-ab/caic/PrInCE/CCPrinceR.RData
 OUTPUT_DIR=~/projects/rrg-ljfoster-ab/caic/PrInCE/ppis
-CLASSIFER=NB
+CLASSIFIER="NB"
 NMODELS=10
 
 Rscript $RSCRIPTPATH \
     --input_file "$INPUT_FILE" \
     --output_dir "$OUTPUT_DIR" \
-    --classifer "$CLASSIFER" \
+    --classifier "$CLASSIFIER" \
+
+    
     --nmodels $NMODELS \
 
 
