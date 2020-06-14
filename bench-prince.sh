@@ -1,12 +1,10 @@
-# Runs PrInCE with set arguments
 #!/bin/bash
 
+# Runs PrInCE with set arguments
 cd ~/OneDrive/git/PrinceR
 [[ $HOSTNAME =~ "computecanada" ]] && ONCC="true" 
 
 # load R if on Compute Canada
-
-
 if [[ -v ONCC ]]; then
     module load nixpkgs/16.09  
     module load gcc/7.3.0
