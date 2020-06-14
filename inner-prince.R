@@ -31,5 +31,5 @@ output_file = file.path(args$output_dir, output_filename)
 results = PrInCE(dataset, goldstd, classifier = args$classifier, models = args$nmodels)
 
 # write out
-write,csv(results, file = output_file)
+write.csv(results, file = output_file)
 system(paste("gzip --force", output_file))
