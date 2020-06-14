@@ -28,10 +28,8 @@ output_file = file.path(args$output_dir, output_filename)
 
 
 # results
-results = c(dataname, args$classifier, args$nmodels)
+results = PrInCE(dataset, goldstd, classifier = args$classifier, models = args$nmodels)
 
 # write out
-write(results, file = output_file)
-
-head(goldstd)
-dataset[[1]][1:5,1:5]
+write,csv(results, file = output_file)
+system(paste("gzip --force", output_file))
