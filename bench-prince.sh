@@ -26,8 +26,6 @@ Rscript $RSCRIPTPATH \
     --input_file "$INPUT_FILE" \
     --output_dir "$OUTPUT_DIR" \
     --classifier "$CLASSIFIER" \
-
-    
     --nmodels $NMODELS \
 
 
