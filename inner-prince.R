@@ -35,7 +35,6 @@ results <- PrInCE(dataset,
   goldstd,
   classifier = args$classifier,
   models = args$nmodels
-  
 )
 
 # write out
