@@ -16,7 +16,7 @@ library(magrittr)
 system = Sys.info()[["nodename"]]
 
 if (grepl("cedar", system)) {
-  base_dir = "~/projects/rrg-ljfoster-ab/caic/PrInCE/"
+  base_dir = "/home/caic/projects/rrg-ljfoster-ab/caic/PrInCE"
 } else {
   base_dir = "/home/charley/OneDrive/2019 Term 1/Foster Lab/PrInCER/CC"
 }
@@ -72,10 +72,10 @@ script = file.path(getwd(), "bench-prince.sh")
 if (grepl("cedar", system)) {
     system(
       paste0("cd ", "'", base_dir,"'; ",
-            "sbatch ", "--account= ", args$allocation,
+            "sbatch ", "--account=", args$allocation,
             " --job-name=", args$name, 
             " --array=1-", nrow(grid),
-            " --export=NAME=ALL,", args$name, " ", script)
+            " --export=ALL,NAME=,", args$name, " ", script)
   )
 } else {
   system(paste(script, args$name))

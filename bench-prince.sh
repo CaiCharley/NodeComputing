@@ -18,11 +18,10 @@ fi
 
 # R Script Location
 RSCRIPTPATH=~/OneDrive/git/PrinceR/inner-prince.R
-SLURM_ARRAY_TASK_ID=1 ##!!!
 
 # get job array
 if [[ $HOSTNAME =~ "cedar" ]]; then
-    GRID_FILE='~/projects/rrg-ljfoster-ab/caic/PrInCE/'$NAME'_grid.txt'
+    GRID_FILE=/home/caic/projects/rrg-ljfoster-ab/caic/PrInCE/$NAME'_grid.txt'
 else 
     GRID_FILE=/home/charley/OneDrive/2019\ Term\ 1/Foster\ Lab/PrInCER/CC/$1_grid.txt
 fi
