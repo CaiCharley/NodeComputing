@@ -5,7 +5,7 @@ setwd("~/OneDrive/git/PrinceR")
 library(argparse)
 parser = ArgumentParser()
 parser$add_argument('--allocation', type = 'character', default = "rrg-ljfoster-ab")
-parser$add_argument('--name', type = 'character', default = "ppis")
+parser$add_argument('--name', type = 'character', default = "ppis") 
 args = parser$parse_args()
 
 # load libraries
@@ -35,7 +35,6 @@ output_dir = file.path(base_dir, args$name)
 if (!dir.exists(output_dir))
   dir.create(output_dir, recursive = T)
 
-
 # generate grid of argument permutations
 options <- list(
   input_file = input_files,
@@ -63,7 +62,6 @@ if (!overwrite) {
     ))
 }
 
-
 # write grid
 write.table(grid, file.path(base_dir, paste(args$name, "grid.txt", sep = "_")), 
             quote = F, row.names = F, sep = "\t")
@@ -71,13 +69,14 @@ write.table(grid, file.path(base_dir, paste(args$name, "grid.txt", sep = "_")),
 # submits job
 script = file.path(getwd(), "bench-prince.sh")
 
-
 if (grepl("cedar", system)) {
     system(
       paste0("cd ", "'", base_dir,"'; ",
             "sbatch ", "--account= ", args$allocation,
-            " --array=1-", nrow(grid)," ", script)
+            " --job-name=", args$name, 
+            " --array=1-", nrow(grid),
+            " --export=NAME=ALL,", args$name, " ", script)
   )
+} else {
+  system(paste(script, args$name))
 }
-
-
