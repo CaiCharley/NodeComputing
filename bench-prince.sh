@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --time=5:00:00
-#SBATCH --output=~/projects/rrg-ljfoster-ab/caic/PrInCE/%x-%j-%a.out
+#SBATCH --output=/home/caic/projects/rrg-ljfoster-ab/caic/PrInCE/%x-%j-%a.out
 #SBATCH --mem=16G
 #SBATCH --mail-user=charley.cai113@gmail.com
 #SBATCH --mail-type=END
@@ -36,9 +36,9 @@ NMODELS=${PARAMS[2]}
 
 # set output directory
 if [[ $HOSTNAME =~ "cedar" ]]; then
-    OUTPUT_DIR=~/projects/rrg-ljfoster-ab/caic/PrInCE/$NAME/
+    OUTPUT_DIR=~/projects/rrg-ljfoster-ab/caic/PrInCE/$NAME
 else 
-    OUTPUT_DIR=/home/charley/OneDrive/2019\ Term\ 1/Foster\ Lab/PrInCER/CC/$1/
+    OUTPUT_DIR=/home/charley/OneDrive/2019\ Term\ 1/Foster\ Lab/PrInCER/CC/$1
 fi
 
 # run inner R script
