@@ -56,7 +56,7 @@ if (!overwrite) {
         classifier,
         nmodels,
         sep = "_") %>%              # creates file name with conditions
-      paste0(".txt.gz") %>%         # output file type
+      paste0(".csv.gz") %>%         # output file type
       file.path(output_dir, .) %>%  # creates expect file dir
       file.exists()                 # checks if file exists
     ))

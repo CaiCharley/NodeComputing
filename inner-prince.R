@@ -27,7 +27,7 @@ if (!dir.exists(args$output_dir)) {
 }
 conditions <-
   paste(dataname, args$classifier, args$nmodels, sep = "_")
-output_filename <- paste0(conditions, ".txt")
+output_filename <- paste0(conditions, ".csv")
 output_file <- file.path(args$output_dir, output_filename)
 
 # results
