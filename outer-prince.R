@@ -79,8 +79,8 @@ if (plyr::empty(grid)) {
   write.table(grid, file.path(base_dir, paste(args$name, "grid.txt", sep = "_")), 
               quote = F, row.names = F, sep = "\t")
   
-  message(paste(nrow(grid), "jobs remaining. \n",
-                "Updated", args$name, "grid file at", 
+  message(paste(nrow(grid), "jobs remaining.",
+                "\nUpdated", args$name, "grid file at", 
                 file.path(base_dir, paste(args$name, "grid.txt", sep = "_"))))
 }
 

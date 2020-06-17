@@ -10,7 +10,7 @@
 cd ~/OneDrive/git/PrinceR
 
 # load R if on Compute Canada
-if [[ $HOSTNAME =~ "cedar" ]]; then
+if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
     module load nixpkgs/16.09  
     module load gcc/7.3.0
     module load r/4.0.0
@@ -20,7 +20,7 @@ fi
 RSCRIPTPATH=~/OneDrive/git/PrinceR/inner-prince.R
 
 # get job array
-if [[ $HOSTNAME =~ "cedar" ]]; then
+if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
     GRID_FILE=/home/caic/projects/rrg-ljfoster-ab/caic/PrInCE/$NAME'_grid.txt'
 else 
     GRID_FILE=/home/charley/OneDrive/2019\ Term\ 1/Foster\ Lab/PrInCER/CC/$1_grid.txt
@@ -35,7 +35,7 @@ CLASSIFIER=${PARAMS[1]}
 NMODELS=${PARAMS[2]}
 
 # set output directory
-if [[ $HOSTNAME =~ "cedar" ]]; then
+if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
     OUTPUT_DIR=~/projects/rrg-ljfoster-ab/caic/PrInCE/$NAME
 else 
     OUTPUT_DIR=/home/charley/OneDrive/2019\ Term\ 1/Foster\ Lab/PrInCER/CC/$1
