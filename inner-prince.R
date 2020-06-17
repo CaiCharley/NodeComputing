@@ -25,9 +25,18 @@ dataset <- readRDS(args$input_file)
 if (!dir.exists(args$output_dir)) {
   dir.create(args$output_dir, recursive = T)
 }
-conditions <-
-  paste(dataname, args$classifier, args$nmodels, sep = "_")
-output_filename <- paste0(conditions, ".csv")
+
+conditions <- args[grep("input_file|output_dir", names(args), invert = T)]
+      
+condnames <- ""
+for (i in 1:length(conditions)){
+  condnames <- paste0(condnames, "-",
+                      names(conditions)[i], "=",
+                      conditions[i])
+}                     # conditions will be listed alphabetically
+output_filename <- paste0(dataname,  # input file
+                          condnames, # conditions
+                          ".csv")    # file type
 output_file <- file.path(args$output_dir, output_filename)
 
 # results
