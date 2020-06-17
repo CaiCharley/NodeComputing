@@ -73,10 +73,16 @@ if (!overwrite) {
 }
 
 # write grid
-write.table(grid, file.path(base_dir, paste(args$name, "grid.txt", sep = "_")), 
-            quote = F, row.names = F, sep = "\t")
-message(paste("Updated", args$name, "grid file at", 
-              file.path(base_dir, paste(args$name, "grid.txt", sep = "_"))))
+if (plyr::empty(grid)) {
+  message("All Jobs Completed")
+} else {
+  write.table(grid, file.path(base_dir, paste(args$name, "grid.txt", sep = "_")), 
+              quote = F, row.names = F, sep = "\t")
+  
+  message(paste(nrow(grid), "jobs remaining. \n",
+                "Updated", args$name, "grid file at", 
+                file.path(base_dir, paste(args$name, "grid.txt", sep = "_"))))
+}
 
 # submits job
 script = file.path(getwd(), "bench-prince.sh")
