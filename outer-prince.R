@@ -79,13 +79,13 @@ if (plyr::empty(grid)) {
   write.table(grid, file.path(base_dir, paste(args$name, "grid.txt", sep = "_")), 
               quote = F, row.names = F, sep = "\t")
   
-  message(paste(nrow(grid), "jobs remaining. \n",
-                "Updated", args$name, "grid file at", 
+  message(paste(nrow(grid), "jobs remaining.",
+                "\nUpdated", args$name, "grid file at", 
                 file.path(base_dir, paste(args$name, "grid.txt", sep = "_"))))
 }
 
 # submits job
-script = file.path(getwd(), "bench-prince.sh")
+script = file.path(getwd(), "bench-prince.sh") #!
 if(args$submit){
   if (grepl("cedar", system)) {
       system(
@@ -93,7 +93,7 @@ if(args$submit){
               "sbatch ", "--account=", args$allocation,
               " --job-name=", args$name,
               " --array=1-", nrow(grid),
-              " --export=ALL,NAME=,", args$name, " ", script)
+              " --export=ALL,NAME=", args$name, " ", script)
     )
   } else {
     system(paste(script, args$name))
