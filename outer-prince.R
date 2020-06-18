@@ -85,7 +85,7 @@ if (plyr::empty(grid)) {
 }
 
 # submits job
-script = file.path(getwd(), "bench-prince.sh")
+script = file.path(getwd(), "bench-prince.sh") #!
 if(args$submit){
   if (grepl("cedar", system)) {
       system(
@@ -93,7 +93,7 @@ if(args$submit){
               "sbatch ", "--account=", args$allocation,
               " --job-name=", args$name,
               " --array=1-", nrow(grid),
-              " --export=ALL,NAME=,", args$name, " ", script)
+              " --export=ALL,NAME=", args$name, " ", script)
     )
   } else {
     system(paste(script, args$name))
