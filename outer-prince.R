@@ -1,4 +1,4 @@
-# Benchmarking PrInCE with different conditions using Compute Canada Node
+# Submits job arrays to compute canada node
 setwd("~/OneDrive/git/PrinceR")
 
 # "!" indicated things user may need to change
@@ -7,7 +7,8 @@ setwd("~/OneDrive/git/PrinceR")
 library(argparse)
 parser = ArgumentParser()
 parser$add_argument('--allocation', type = 'character', default = "rrg-ljfoster-ab")
-parser$add_argument('--name', type = 'character', default = "ppis") 
+parser$add_argument('--name', type = 'character', required = T,
+                    choices=c('ppis', 'bench')) 
 parser$add_argument("-s", "--submit", action="store_true", default=FALSE,
                     help="Submits Job. Otherwise only updates grid")
 args = parser$parse_args()
@@ -76,16 +77,19 @@ if (!overwrite) {
 if (plyr::empty(grid)) {
   message("All Jobs Completed")
 } else {
-  write.table(grid, file.path(base_dir, paste(args$name, "grid.txt", sep = "_")), 
-              quote = F, row.names = F, sep = "\t")
+  grid_path <- file.path(getwd(), "grids", paste(args$name, "grid.txt", sep = "_"))
   
+  if (!dir.exists(dirname(grid_path))) {
+    dir.create(dirname(grid_path), recursive = T)
+  }
+  write.table(grid, grid_path, quote = F, row.names = F, sep = "\t")  
   message(paste(nrow(grid), "jobs remaining.",
                 "\nUpdated", args$name, "grid file at", 
-                file.path(base_dir, paste(args$name, "grid.txt", sep = "_"))))
+                grid_path))
 }
 
 # submits job
-script = file.path(getwd(), "bench-prince.sh") #!
+script = file.path(getwd(), paste0(args$name, "-prince.sh")) #!
 if(args$submit){
   if (grepl("cedar", system)) {
       system(
