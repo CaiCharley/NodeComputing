@@ -41,14 +41,7 @@ output_filename <- paste0(dataname,  # input file
                           ".csv")    # file type
 output_file <- file.path(args$output_dir, output_filename)
 
-# creates master file for all the benchmarks
-benchmarks_path <- file.path(args$output_dir,"benchmarks.rds")
-
-if (!file.exists(benchmarks_path))
-  saveRDS(NULL, benchmarks_path)
-
-benchmarks <- readRDS(benchmarks_path)
-
+# benchmarks Prince
 ram <- peakRAM(
   temp <- microbenchmark("Prince" = {
     PrInCE(dataset, goldstd,
@@ -61,10 +54,18 @@ ram <- peakRAM(
 time <- summary(temp)
 
 benchmark <- cbind(time, ram["Peak_RAM_Used_MiB"])
-benchmark[1] = paste(dataname, condnames, sep = "-")
+benchmark[1] = paste0(dataname, condnames)
 
-rbind(benchmarks, benchmark)
-saveRDS(benchmarks, benchmarks_path)
+# creates master file for all the benchmarks
+benchmarks_path <- file.path(args$output_dir,"benchmarks.rds")
+
+if (!file.exists(benchmarks_path)) {
+  saveRDS(benchmark, benchmarks_path)
+} else {
+  benchmarks <- readRDS(benchmarks_path)
+  benchmarks <- rbind(benchmarks, benchmark)
+  saveRDS(benchmarks, benchmarks_path)
+}
 
 # write out (only to update grid file)
 write(NULL, file = paste0(output_file, ".gz"))
