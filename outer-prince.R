@@ -1,19 +1,17 @@
-# Submits job arrays to compute canada node
+# Submits job arrays to Compute Canada node
 # "!" indicated things user may need to change
 
 # parse arguments
 library(argparse)
 parser = ArgumentParser()
 parser$add_argument('--allocation', type = 'character', default = "rrg-ljfoster-ab")
-parser$add_argument('--name', type = 'character', default = "ppis",
+parser$add_argument('--name', type = 'character', required = T,
                     choices=c('ppis', 'bench'))
-# parser$add_argument('--name', type = 'character', required = T,
-#                     choices=c('ppis', 'bench'))
 parser$add_argument('--project', type = 'character', default = "princeR",
                     choices=c('princeR'))                    
 parser$add_argument("-s", "--submit", action="store_true", default=FALSE,
                     help="Submits Job. Otherwise only updates grid")
-args = parser$parse_args()
+args <- parser$parse_args()
 
 setwd(file.path("~/OneDrive/git/NodeComputing/", args$project))
 
@@ -22,12 +20,12 @@ library(tidyverse)
 library(magrittr)
 
 # system type
-system = Sys.info()[["nodename"]]
+system <- Sys.info()[["nodename"]]
 
 if (grepl("cedar", system)) {
-  base_dir = file.path("/home/caic/projects/rrg-ljfoster-ab/caic/", args$project)
+  base_dir <- file.path("/home/caic/projects/rrg-ljfoster-ab/caic/", args$project)
 } else {
-  base_dir = "/home/charley/OneDrive/2019 Term 1/Foster Lab/PrInCER/CC"
+  base_dir <- "/home/charley/OneDrive/2019 Term 1/Foster Lab/PrInCER/CC"
 }
 
 # list input files ! 
@@ -50,17 +48,17 @@ grid <- expand.grid(options, stringsAsFactors = F)
 colnames(grid) <- names(options)
 
 # set output directory
-output_dir = file.path(base_dir, args$name)
+output_dir <- file.path(base_dir, args$name)
 if (!dir.exists(output_dir))
   dir.create(output_dir, recursive = T)
 
 #check which jobs are already complete
-overwrite = F
+overwrite <- F
 if (!overwrite) {
   optionprefix <- paste0("-", names(options[-1]), "=")
-  not_done = NULL
+  not_done <- NULL
    for(job in 1:nrow(grid)) {
-    expected_output = grid[job, "input_file"] %>% 
+    expected_output <- grid[job, "input_file"] %>% 
       basename() %>%
       gsub("\\.rds$", "", .)  # ! input file type
     expected_output <- 
@@ -69,7 +67,6 @@ if (!overwrite) {
              ".csv.gz")       # ! output file extension
     if (!(file.path(output_dir, expected_output) %>% file.exists()))
       not_done <- c(not_done, job)
-    
    }
   grid <- slice(grid, not_done)
 }
@@ -81,9 +78,8 @@ if (plyr::empty(grid)) {
   grid_path <- file.path(getwd(), args$name, 
                          paste(args$name, "grid.txt", sep = "_"))
   write.table(grid, grid_path, quote = F, row.names = F, sep = "\t")  
-  message(paste(nrow(grid), "jobs remaining.",
-                "\nUpdated", args$name, "grid file at", 
-                grid_path))
+  message(sprintf("%d jobs remaining.\nUpdated %s grid file at %s.",
+                 nrow(grid), args$name, grid_path))
 }
 
 # submits job
@@ -92,12 +88,9 @@ script = file.path(getwd(), args$name,
 if(args$submit){
   if (grepl("cedar", system)) {
       system(
-        paste0("cd ", "'", base_dir,"'; ",
-              "sbatch ", "--account=", args$allocation,
-              " --job-name=", args$name,
-              " --array=1-", nrow(grid),
-              " --export=ALL,NAME=", args$name,
-              ",PROJECT=", args$project, " ", script)
+        sprintf("cd '%s'; sbatch --account=%s --job-name=%s --array=1-%d --export=ALL,NAME=%s,PROJECT=%s %s",
+                base_dir, args$allocation, args$name, nrow(grid),
+                args$name, args$project, script)
     )
   } else {
     system(paste(script, args$name))
