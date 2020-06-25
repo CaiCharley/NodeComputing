@@ -1,5 +1,5 @@
 # Run PrInCE on Scott's dataset with set arguments
-setwd("~/OneDrive/git/PrinceR")
+setwd("~/OneDrive/git/NodeComputing/princeR")
 
 # parse arguments
 library(argparse)

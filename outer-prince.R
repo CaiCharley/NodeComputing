@@ -1,6 +1,4 @@
 # Submits job arrays to compute canada node
-setwd("~/OneDrive/git/PrinceR")
-
 # "!" indicated things user may need to change
 
 # parse arguments
@@ -8,10 +6,17 @@ library(argparse)
 parser = ArgumentParser()
 parser$add_argument('--allocation', type = 'character', default = "rrg-ljfoster-ab")
 parser$add_argument('--name', type = 'character', required = T,
-                    choices=c('ppis', 'bench')) 
+                    choices=c('ppis', 'bench'))
+parser$add_argument('--project', type = 'character', default = "princeR",
+                    choices=c('princeR'))                    
 parser$add_argument("-s", "--submit", action="store_true", default=FALSE,
                     help="Submits Job. Otherwise only updates grid")
 args = parser$parse_args()
+
+if (!dir.exists(output_dir))
+  dir.create(output_dir, recursive = T)
+
+setwd(file.path("~/OneDrive/git/NodeComputing/", args$project))
 
 # load libraries
 library(tidyverse)
@@ -21,7 +26,7 @@ library(magrittr)
 system = Sys.info()[["nodename"]]
 
 if (grepl("cedar", system)) {
-  base_dir = "/home/caic/projects/rrg-ljfoster-ab/caic/PrInCE"
+  base_dir = file.path("/home/caic/projects/rrg-ljfoster-ab/caic/", args$project)
 } else {
   base_dir = "/home/charley/OneDrive/2019 Term 1/Foster Lab/PrInCER/CC"
 }
@@ -77,11 +82,8 @@ if (!overwrite) {
 if (plyr::empty(grid)) {
   message("All Jobs Completed")
 } else {
-  grid_path <- file.path(getwd(), "grids", paste(args$name, "grid.txt", sep = "_"))
-  
-  if (!dir.exists(dirname(grid_path))) {
-    dir.create(dirname(grid_path), recursive = T)
-  }
+  grid_path <- file.path(getwd(), args$name, 
+                         paste(args$name, "grid.txt", sep = "_"))
   write.table(grid, grid_path, quote = F, row.names = F, sep = "\t")  
   message(paste(nrow(grid), "jobs remaining.",
                 "\nUpdated", args$name, "grid file at", 
@@ -89,7 +91,8 @@ if (plyr::empty(grid)) {
 }
 
 # submits job
-script = file.path(getwd(), paste0(args$name, "-prince.sh")) #!
+script = file.path(getwd(), args$name, 
+                   paste0(args$name, "-", args$project, ".sh"))
 if(args$submit){
   if (grepl("cedar", system)) {
       system(
@@ -97,7 +100,8 @@ if(args$submit){
               "sbatch ", "--account=", args$allocation,
               " --job-name=", args$name,
               " --array=1-", nrow(grid),
-              " --export=ALL,NAME=", args$name, " ", script)
+              " --export=ALL,NAME=", args$name,
+              ",PROJECT=", args$project, " ", script)
     )
   } else {
     system(paste(script, args$name))
