@@ -25,7 +25,7 @@ system <- Sys.info()[["nodename"]]
 if (grepl("cedar", system)) {
   base_dir <- file.path("/home/caic/projects/rrg-ljfoster-ab/caic/", args$project)
 } else {
-  base_dir <- "/home/charley/OneDrive/2019 Term 1/Foster Lab/PrInCER/CC"
+  base_dir <- "/home/charley/OneDrive/Academic/Foster Lab/PrInCER/CC"
 }
 
 # list input files ! 
