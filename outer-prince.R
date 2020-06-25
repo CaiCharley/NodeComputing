@@ -5,8 +5,10 @@
 library(argparse)
 parser = ArgumentParser()
 parser$add_argument('--allocation', type = 'character', default = "rrg-ljfoster-ab")
-parser$add_argument('--name', type = 'character', required = T,
+parser$add_argument('--name', type = 'character', default = "ppis",
                     choices=c('ppis', 'bench'))
+# parser$add_argument('--name', type = 'character', required = T,
+#                     choices=c('ppis', 'bench'))
 parser$add_argument('--project', type = 'character', default = "princeR",
                     choices=c('princeR'))                    
 parser$add_argument("-s", "--submit", action="store_true", default=FALSE,
@@ -55,19 +57,16 @@ if (!dir.exists(output_dir))
 #check which jobs are already complete
 overwrite = F
 if (!overwrite) {
-  optionprefix <- lapply(names(options[-1]), function(x) paste0("-", x, "="))
+  optionprefix <- paste0("-", names(options[-1]), "=")
   not_done = NULL
    for(job in 1:nrow(grid)) {
     expected_output = grid[job, "input_file"] %>% 
       basename() %>%
       gsub("\\.rds$", "", .)  # ! input file type
     expected_output <- 
-      do.call(paste0, 
-              append(expected_output, 
-                      lapply(names(options[-1]), function(x) grid[job, x]) %>%
-                        paste0(optionprefix, .) %>%
-                        as.list()) %>%
-                append(".csv.gz"))       # ! output file extension
+      paste0(expected_output,
+             paste0(optionprefix, grid[job, names(options[-1])], collapse = ""),
+             ".csv.gz")       # ! output file extension
     if (!(file.path(output_dir, expected_output) %>% file.exists()))
       not_done <- c(not_done, job)
     
