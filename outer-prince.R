@@ -13,9 +13,6 @@ parser$add_argument("-s", "--submit", action="store_true", default=FALSE,
                     help="Submits Job. Otherwise only updates grid")
 args = parser$parse_args()
 
-if (!dir.exists(output_dir))
-  dir.create(output_dir, recursive = T)
-
 setwd(file.path("~/OneDrive/git/NodeComputing/", args$project))
 
 # load libraries
