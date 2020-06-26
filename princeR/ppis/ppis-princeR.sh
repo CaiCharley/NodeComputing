@@ -10,7 +10,7 @@ cd $(dirname $(readlink -f $0))
 
 # load R if on Compute Canada
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
-    module load nixpkgs/16.09  
+    module load nixpkgs/16.09
     module load gcc/7.3.0
     module load r/4.0.0
 fi
@@ -18,14 +18,14 @@ fi
 # R Script Location
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
     RSCRIPTPATH=./$NAME-princeR.R
-else 
+else
     RSCRIPTPATH=./$1-princeR.R
 fi
 
 # get job array
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
     GRID_FILE=./$NAME'_grid.txt'
-else 
+else
     GRID_FILE=./$1'_grid.txt'
 fi
 
@@ -40,7 +40,7 @@ NMODELS=${PARAMS[2]}
 # set output directory !
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
     OUTPUT_DIR=~/projects/rrg-ljfoster-ab/caic/princeR/$NAME
-else 
+else
     OUTPUT_DIR=/home/charley/OneDrive/2019\ Term\ 1/Foster\ Lab/PrInCER/CC/$1
 fi
 
@@ -49,4 +49,4 @@ Rscript $RSCRIPTPATH \
     --input_file "$INPUT_FILE" \
     --output_dir "$OUTPUT_DIR" \
     --classifier "$CLASSIFIER" \
-    --nmodels "$NMODELS" 
+    --nmodels "$NMODELS"

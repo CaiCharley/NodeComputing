@@ -29,16 +29,20 @@ if (!dir.exists(args$output_dir)) {
 }
 
 conditions <- args[grep("input_file|output_dir", names(args), invert = T)]
-      
+
 condnames <- ""
-for (i in 1:length(conditions)){
-  condnames <- paste0(condnames, "-",
-                      names(conditions)[i], "=",
-                      conditions[i])
-}                     # conditions will be listed alphabetically
-output_filename <- paste0(dataname,  # input file
-                          condnames, # conditions
-                          ".csv")    # file type
+for (i in seq_len(length(conditions))) {
+  condnames <- paste0(
+    condnames, "-",   # conditions will be listed alphabetically
+    names(conditions)[i], "=",
+    conditions[i]
+  )
+}
+output_filename <- paste0(
+  dataname,  # input file
+  condnames, # conditions
+  ".csv"     # file type
+)
 output_file <- file.path(args$output_dir, output_filename)
 
 # benchmarks Prince
@@ -48,16 +52,16 @@ ram <- peakRAM(
       classifier = args$classifier,
       models = args$nmodels
     )
-  }, times = 3, unit="s")
+  }, times = 3, unit = "s")
 )
 
 time <- summary(temp)
 
 benchmark <- cbind(time, ram["Peak_RAM_Used_MiB"])
-benchmark[1] = paste0(dataname, condnames)
+benchmark[1] <- paste0(dataname, condnames)
 
 # creates master file for all the benchmarks
-benchmarks_path <- file.path(args$output_dir,"benchmarks.rds")
+benchmarks_path <- file.path(args$output_dir, "benchmarks.rds")
 
 if (!file.exists(benchmarks_path)) {
   saveRDS(benchmark, benchmarks_path)
