@@ -49,3 +49,4 @@ results <- PrInCE(dataset,
 # write out
 write.csv(results, file = output_file)
 system(paste("gzip --force", output_file))
+message("Done")
