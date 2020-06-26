@@ -1,6 +1,5 @@
 #!/bin/bash
 #SBATCH --time=5:00:00
-#SBATCH --output=/home/caic/projects/rrg-ljfoster-ab/caic/PrInCE/%x-%A-%a.out
 #SBATCH --mem=16G
 #SBATCH --mail-user=charley.cai113@gmail.com
 #SBATCH --mail-type=END

@@ -1,7 +1,5 @@
 #!/bin/bash
 #SBATCH --time=48:00:00
-#SBATCH --output=/home/caic/projects/rrg-ljfoster-ab/caic/PrInCE/%x-%A-%a.out
-#SBATCH --constraint=skylake
 #SBATCH --mem=32G
 #SBATCH --mail-user=charley.cai113@gmail.com
 #SBATCH --mail-type=END
