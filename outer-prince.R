@@ -8,7 +8,7 @@ parser$add_argument("--allocation",
   type = "character", default = "rrg-ljfoster-ab"
 )
 parser$add_argument("--name",
-  type = "character", required = T, choices = c("ppis", "bench")
+  type = "character", default = "ppis", choices = c("ppis", "bench")
 )
 parser$add_argument("--project",
   type = "character", default = "princeR", choices = c("princeR")
@@ -77,10 +77,10 @@ if (!overwrite) {
         ".csv.gz" # ! output file extension
       )
     if (!(file.path(output_dir, expected_output) %>% file.exists())) {
-      not_done <- c(not_done, job)
+      not_done %<>% c(job)
     }
   }
-  grid <- slice(grid, not_done)
+  grid %<>% slice(not_done)
 }
 
 # write grid
