@@ -6,7 +6,7 @@
 #SBATCH --mail-type=FAIL
 
 # Runs PrInCE with set arguments
-cd $(dirname $0)
+cd $(dirname $(readlink -f $0))
 
 # load R if on Compute Canada
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
@@ -17,9 +17,9 @@ fi
 
 # R Script Location
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
-    RSCRIPTPATH=./$NAME-prince.R
+    RSCRIPTPATH=./$NAME-princeR.R
 else 
-    RSCRIPTPATH=./$1-prince.R
+    RSCRIPTPATH=./$1-princeR.R
 fi
 
 # get job array
