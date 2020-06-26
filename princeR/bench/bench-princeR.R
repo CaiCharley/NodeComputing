@@ -1,5 +1,5 @@
 # Benchmark PrInCE on Scott's dataset with set arguments
-setwd("~/OneDrive/git/PrinceR")
+setwd("~/OneDrive/git/NodeComputing/princeR")
 
 # parse arguments
 library(argparse)
@@ -69,3 +69,4 @@ if (!file.exists(benchmarks_path)) {
 
 # write out (only to update grid file)
 write(NULL, file = paste0(output_file, ".gz"))
+message("Done")
