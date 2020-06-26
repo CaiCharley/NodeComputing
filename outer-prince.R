@@ -83,13 +83,17 @@ if (plyr::empty(grid)) {
 }
 
 # submits job
-script = file.path(getwd(), args$name, 
+script <- file.path(getwd(), args$name, 
                    paste0(args$name, "-", args$project, ".sh"))
+logs_path <- file.path(base_dir, args$name, "logs", "%x-%A-%a.out")
+if (!dir.exists(dirname(logs_path)))
+  dir.create(dirname(logs_path), recursive = T)
+
 if(args$submit){
   if (grepl("cedar", system)) {
       system(
-        sprintf("cd '%s'; sbatch --account=%s --job-name=%s --array=1-%d --export=ALL,NAME=%s,PROJECT=%s %s",
-                base_dir, args$allocation, args$name, nrow(grid),
+        sprintf("cd '%s'; sbatch --account=%s --job-name=%s --array=1-%d --output=%s --export=ALL,NAME=%s,PROJECT=%s %s",
+                base_dir, args$allocation, args$name, nrow(grid), logs_path,
                 args$name, args$project, script)
     )
   } else {
