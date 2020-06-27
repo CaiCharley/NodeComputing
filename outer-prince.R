@@ -8,7 +8,7 @@ parser$add_argument("--allocation",
   type = "character", default = "rrg-ljfoster-ab"
 )
 parser$add_argument("--name",
-  type = "character", default = "ppis", choices = c("ppis", "bench")
+  type = "character", required = T, choices = c("ppis", "bench")
 )
 parser$add_argument("--project",
   type = "character", default = "princeR", choices = c("princeR")
