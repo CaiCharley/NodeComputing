@@ -65,7 +65,7 @@ if (!dir.exists(output_dir)) {
 overwrite <- F
 if (!overwrite) {
   optionprefix <- paste0("-", names(options[-1]), "=")
-  not_done <- NULL
+  not_done <- vector("integer", nrow(grid))
   for (job in seq_len(nrow(grid))) {
     expected_output <- grid[job, "input_file"] %>%
       basename() %>%
@@ -77,7 +77,7 @@ if (!overwrite) {
         ".csv.gz" # ! output file extension
       )
     if (!(file.path(output_dir, expected_output) %>% file.exists())) {
-      not_done %<>% c(job)
+      not_done[[job]] <- job
     }
   }
   grid %<>% slice(not_done)
