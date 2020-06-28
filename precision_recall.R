@@ -36,7 +36,7 @@ by_dataset <- ppis %>% group_split(dataset)
 for (data in by_dataset) {
   dataname <- data$dataset[1]
   plot <- ggplot(data) +
-    geom_smooth(aes(n, precision, color = as.factor(nmodels)), se = F) +
+    geom_path(aes(n, precision, color = as.factor(nmodels)), se = F) +
     facet_wrap(~classifier, nrow = 2) +
     ggtitle(dataname) +
     ylab("Precision") +
