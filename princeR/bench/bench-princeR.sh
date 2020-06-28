@@ -17,15 +17,15 @@ fi
 
 # R Script Location
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
-    RSCRIPTPATH=./$NAME-princeR.R
-else 
+    RSCRIPTPATH=/home/caic/OneDrive/git/NodeComputing/princeR/$NAME/$NAME-princeR.R
+else
     RSCRIPTPATH=./$1-princeR.R
 fi
 
 # get job array
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
-    GRID_FILE=./$NAME'_grid.txt'
-else 
+    GRID_FILE=/home/caic/OneDrive/git/NodeComputing/princeR/$NAME/$NAME'_grid.txt'
+else
     GRID_FILE=./$1'_grid.txt'
 fi
 

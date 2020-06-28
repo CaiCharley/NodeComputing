@@ -27,16 +27,20 @@ if (!dir.exists(args$output_dir)) {
 }
 
 conditions <- args[grep("input_file|output_dir", names(args), invert = T)]
-      
+
 condnames <- ""
-for (i in 1:length(conditions)){
-  condnames <- paste0(condnames, "-",
-                      names(conditions)[i], "=",
-                      conditions[i])
-}                     # conditions will be listed alphabetically
-output_filename <- paste0(dataname,  # input file
-                          condnames, # conditions
-                          ".csv")    # file type
+for (i in seq_len(length(conditions))) {
+  condnames <- paste0(
+    condnames, "-",   # conditions will be listed alphabetically
+    names(conditions)[i], "=",
+    conditions[i]
+  )
+}
+output_filename <- paste0(
+  dataname,  # input file
+  condnames, # conditions
+  ".csv"     # file type
+)
 output_file <- file.path(args$output_dir, output_filename)
 
 # results
