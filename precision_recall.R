@@ -4,6 +4,7 @@ setwd("/home/caic/projects/rrg-ljfoster-ab/caic/princeR/ppis/")
 
 # load libraries
 library(tidyverse)
+library(magrittr)
 
 # load data
 files <- list.files(getwd(), pattern = "*.csv.gz") # !
