@@ -30,16 +30,14 @@ ppis %<>% mutate(
   select(-filepath, -protein_A, -protein_B) %>%
   filter(n %% 10 == 0)
 
-
-
 # plot
 
 # Graph coloured by classifier, facet by dataset
 ppis %<>% filter(nmodels == 1)
 plot <- ggplot(ppis) +
-  geom_path(aes(n, precision, color = as.factor(classifier)), se = F) +
+  geom_path(aes(n, precision, color = as.factor(classifier))) +
   facet_wrap(~dataset, nrow = 2) +
-  ggtitle(dataname) +
+  ggtitle("Nmodels = 1") +
   ylab("Precision") +
   xlab("Predicted Interaction #") +
   scale_color_discrete(name = "Classifier")
