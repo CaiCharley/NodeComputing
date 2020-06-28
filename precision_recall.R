@@ -30,20 +30,38 @@ ppis %<>% mutate(
   select(-filepath, -protein_A, -protein_B) %>%
   filter(n %% 10 == 0)
 
-by_dataset <- ppis %>% group_split(dataset)
+
 
 # plot
-for (data in by_dataset) {
-  dataname <- data$dataset[1]
-  plot <- ggplot(data) +
-    geom_path(aes(n, precision, color = as.factor(nmodels)), se = F) +
-    facet_wrap(~classifier, nrow = 2) +
-    ggtitle(dataname) +
-    ylab("Precision") +
-    xlab("Predicted Interaction #") +
-    scale_color_discrete(name = "n Models")
-  ggsave(paste0(
-    "~/projects/rrg-ljfoster-ab/caic/princeR/ppis/graphs/",
-    dataname, ".png"
-  ), plot, device = "png")
-}
+
+# Graph coloured by classifier, facet by dataset
+ppis %<>% filter(nmodels == 1)
+plot <- ggplot(ppis) +
+  geom_path(aes(n, precision, color = as.factor(classifier)), se = F) +
+  facet_wrap(~dataset, nrow = 2) +
+  ggtitle(dataname) +
+  ylab("Precision") +
+  xlab("Predicted Interaction #") +
+  scale_color_discrete(name = "Classifier")
+ggsave(paste0(
+  "~/projects/rrg-ljfoster-ab/caic/princeR/ppis/graphs/",
+  "colbyclassifierfacbydata", ".png"
+), plot, device = "png")
+
+
+# Graph for each dataset, coloured nmodel, facet by classifier
+# by_dataset <- ppis %>% group_split(dataset)
+# for (data in by_dataset) {
+#   dataname <- data$dataset[1]
+#   plot <- ggplot(data) +
+#     geom_path(aes(n, precision, color = as.factor(nmodels)), se = F) +
+#     facet_wrap(~classifier, nrow = 2) +
+#     ggtitle(dataname) +
+#     ylab("Precision") +
+#     xlab("Predicted Interaction #") +
+#     scale_color_discrete(name = "n Models")
+#   ggsave(paste0(
+#     "~/projects/rrg-ljfoster-ab/caic/princeR/ppis/graphs/",
+#     dataname, ".png"
+#   ), plot, device = "png")
+# }
