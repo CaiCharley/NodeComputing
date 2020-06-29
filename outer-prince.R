@@ -42,7 +42,9 @@ input_files <- file.path(input_dir, c(
   "bn_unstim.rds",
   "bn_stim.rds",
   "sec_unstim.rds",
-  "sec_stim.rds"
+  "sec_stim.rds",
+  "craig_ifnstim.rds",
+  "craig_ifnunstim.rds"
 ))
 
 # generate grid of argument permutations !
