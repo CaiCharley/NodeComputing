@@ -30,7 +30,7 @@ system <- Sys.info()[["nodename"]]
 
 if (grepl("cedar", system)) {
   base_dir <- file.path(
-    "/home/caic/projects/rrg-ljfoster-ab/caic/", args$project
+    "/home/caic/projects/rrg-ljfoster-ab/caic", args$project
   )
 } else {
   base_dir <- "/home/charley/OneDrive/Academic/Foster Lab/PrInCER/CC"
