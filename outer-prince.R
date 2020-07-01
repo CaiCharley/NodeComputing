@@ -19,7 +19,7 @@ parser$add_argument("-s", "--submit",
 )
 args <- parser$parse_args()
 
-setwd(file.path("~/OneDrive/git/NodeComputing/", args$project))
+setwd(file.path("~/OneDrive/git/NodeComputing", args$project))
 
 # load libraries
 library(tidyverse)
