@@ -7,6 +7,7 @@ pkgnames <- c(
   "BiocManager",
   "magrittr",
   "argparse",
+  "devtools",
   "readxl"
 )
 
@@ -19,12 +20,16 @@ currentpkgs <- installed.packages()[, 1]
 missingpkgs <- setdiff(pkgnames, currentpkgs)
 
 # proprietary installation
-BiocManager::install("PrInCE")
-if (!requireNamespace("PrInCE", quietly = TRUE)) {
-  BiocManager::install("PrInCE")
+if (!"PrInCe" %in% currentpkgs) {
+  devtools::install_github("fosterlab/PrInCE")
 }
-# BiocManager requires nc-config, get with "sudo apt-get install r-cran-ncdf4"
 
+# BiocManager::install("PrInCE")
+# if (!requireNamespace("PrInCE", quietly = TRUE)) {
+#   BiocManager::install("PrInCE")
+# }
+
+# BiocManager requires nc-config, get with "sudo apt-get install r-cran-ncdf4"
 if (!length(missingpkgs) == 0) {
   noquote(c("The following packages(s) failed to install: ", missingpkgs))
 } else {
