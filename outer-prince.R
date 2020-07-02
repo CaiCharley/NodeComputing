@@ -17,6 +17,10 @@ parser$add_argument("-s", "--submit",
   action = "store_true", default = FALSE,
   help = "Submits Job. Otherwise only updates grid"
 )
+parser$add_argument("-r", "--removelogs",
+  action = "store_true", default = FALSE,
+  help = "Removes log files in which the job successfully completed"
+)
 args <- parser$parse_args()
 
 setwd(file.path("~/OneDrive/git/NodeComputing", args$project))
@@ -93,15 +97,22 @@ if (plyr::empty(grid)) {
   ))
 }
 
+# handles logs 
+logs_dir <- file.path(base_dir, args$name, "logs")
+logs_path <- file.path(logs_dir, "%x-%A-%a.out")
+if (!dir.exists(logs_dir)) {
+  dir.create(logs_dir, recursive = T)
+}
+
+if (args$removelogs) {
+  system(paste("./remove_logs.sh", logs_dir))
+}
+
 # submits job
 script <- file.path(
   getwd(), args$name,
   paste0(args$name, "-", args$project, ".sh")
 )
-logs_path <- file.path(base_dir, args$name, "logs", "%x-%A-%a.out")
-if (!dir.exists(dirname(logs_path))) {
-  dir.create(dirname(logs_path), recursive = T)
-}
 
 if (args$submit) {
   if (grepl("cedar", system)) {
