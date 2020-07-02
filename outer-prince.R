@@ -105,7 +105,8 @@ if (!dir.exists(logs_dir)) {
 }
 
 if (args$removelogs) {
-  system(paste(file.path(getwd(), "remove_logs.sh"), logs_dir))
+  system(paste(
+    file.path(dirname(getwd()), "remove_logs.sh"), logs_dir))
 }
 
 # submits job
