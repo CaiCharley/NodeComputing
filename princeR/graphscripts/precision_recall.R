@@ -45,7 +45,7 @@ plot <- ggplot(ppis) +
 ggsave(paste0(
   "~/projects/rrg-ljfoster-ab/caic/princeR/ppis/graphs/",
   "colbyclassifierfacbydata", ".png"
-), plot, device = "png", width = 7, height = 14)
+), plot, device = "png", width = 14, height = 7)
 
 
 # Graph for each dataset, coloured nmodel, facet by classifier
