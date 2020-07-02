@@ -37,7 +37,7 @@ ppis %<>% mutate(
 ppis %<>% filter(nmodels == 1)
 plot <- ggplot(ppis) +
   geom_path(aes(n, precision, color = as.factor(classifier))) +
-  facet_wrap(~dataset, nrow = 2) +
+  facet_wrap(~dataset, nrow = 3) +
   ggtitle("Nmodels = 1") +
   ylab("Precision") +
   xlab("Predicted Interaction #") +
