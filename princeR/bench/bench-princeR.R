@@ -19,7 +19,7 @@ library(peakRAM)
 
 # load input files
 goldstd <-
-  readRDS(dirname(args$input_file) %>% paste0("/goldstd.rds"))
+  readRDS(file.path(dirname(args$input_file), "goldstd.rds"))
 dataname <- gsub("\\.rds$", "", basename(args$input_file))
 dataset <- readRDS(args$input_file)
 

@@ -17,9 +17,13 @@ parser$add_argument("-s", "--submit",
   action = "store_true", default = FALSE,
   help = "Submits Job. Otherwise only updates grid"
 )
+parser$add_argument("-r", "--removelogs",
+  action = "store_true", default = FALSE,
+  help = "Removes log files in which the job successfully completed"
+)
 args <- parser$parse_args()
 
-setwd(file.path("~/OneDrive/git/NodeComputing/", args$project))
+setwd(file.path("~/OneDrive/git/NodeComputing", args$project))
 
 # load libraries
 library(tidyverse)
@@ -30,7 +34,7 @@ system <- Sys.info()[["nodename"]]
 
 if (grepl("cedar", system)) {
   base_dir <- file.path(
-    "/home/caic/projects/rrg-ljfoster-ab/caic/", args$project
+    "/home/caic/projects/rrg-ljfoster-ab/caic", args$project
   )
 } else {
   base_dir <- "/home/charley/OneDrive/Academic/Foster Lab/PrInCER/CC"
@@ -38,12 +42,7 @@ if (grepl("cedar", system)) {
 
 # list input files !
 input_dir <- file.path(base_dir, "scottdata")
-input_files <- file.path(input_dir, c(
-  "bn_unstim.rds",
-  "bn_stim.rds",
-  "sec_unstim.rds",
-  "sec_stim.rds"
-))
+input_files <- list.files(input_dir, "[^goldstd.rds]", full.names = T)
 
 # generate grid of argument permutations !
 options <- list(
@@ -98,15 +97,23 @@ if (plyr::empty(grid)) {
   ))
 }
 
+# handles logs
+logs_dir <- file.path(base_dir, args$name, "logs")
+logs_path <- file.path(logs_dir, "%x-%A-%a.out")
+if (!dir.exists(logs_dir)) {
+  dir.create(logs_dir, recursive = T)
+}
+
+if (args$removelogs) {
+  system(paste(
+    file.path(dirname(getwd()), "remove_logs.sh"), logs_dir))
+}
+
 # submits job
 script <- file.path(
   getwd(), args$name,
   paste0(args$name, "-", args$project, ".sh")
 )
-logs_path <- file.path(base_dir, args$name, "logs", "%x-%A-%a.out")
-if (!dir.exists(dirname(logs_path))) {
-  dir.create(dirname(logs_path), recursive = T)
-}
 
 if (args$submit) {
   if (grepl("cedar", system)) {
