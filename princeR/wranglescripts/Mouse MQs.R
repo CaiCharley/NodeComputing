@@ -14,7 +14,7 @@ files <- map(file_dirs, ~ read_csv(., col_types = cols(
   `Replicate number` = col_factor(),
   .default = col_double()
 )) %>%
-  group_split(`Replicate number`, .keep = F)) %>% 
+  group_split(`Replicate number`, .keep = F)) %>%
   setNames(str_replace_all(file_dirs, c("^maxquant" = "mouse", ".csv$" = "")))
 
 files %<>% map(~ map(., ~ column_to_rownames(., var = "Major Protein group")))

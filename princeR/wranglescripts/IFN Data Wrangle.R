@@ -13,8 +13,8 @@ files <- map(file_name, ~ read_csv(., col_types = cols(
   Gene = col_character(),
   .default = col_double()
 )) %>%
-  select(-Gene) %>% 
-  column_to_rownames(var= "Protein")) %>%
+  select(-Gene) %>%
+  column_to_rownames(var = "Protein")) %>%
   setNames(str_replace(file_name, ".csv$", ""))
 
 # save data

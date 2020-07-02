@@ -14,8 +14,8 @@ files <- map(file_dirs, ~ readRDS(.) %>%
   mutate(
     Protein = str_replace(Proteins, ";.*$", ""),
     .after = 1, .keep = "unused"
-  ) %>% 
-  column_to_rownames(var = "Protein")) %>% 
+  ) %>%
+  column_to_rownames(var = "Protein")) %>%
   setNames(names)
 
 for (i in seq_along(files)) {
