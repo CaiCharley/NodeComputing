@@ -97,7 +97,7 @@ if (plyr::empty(grid)) {
   ))
 }
 
-# handles logs 
+# handles logs
 logs_dir <- file.path(base_dir, args$name, "logs")
 logs_path <- file.path(logs_dir, "%x-%A-%a.out")
 if (!dir.exists(logs_dir)) {
