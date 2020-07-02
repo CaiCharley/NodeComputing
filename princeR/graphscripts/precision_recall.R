@@ -10,7 +10,7 @@ library(magrittr)
 files <- list.files(getwd(), pattern = "*.csv.gz") # !
 
 ppi_list <- map(files, ~ read_csv(.,
-  n_max = 500000,
+  n_max = 100000,
   col_types = cols(
     X1 = col_character(),
     protein_A = col_character(),
@@ -45,7 +45,7 @@ plot <- ggplot(ppis) +
 ggsave(paste0(
   "~/projects/rrg-ljfoster-ab/caic/princeR/ppis/graphs/",
   "colbyclassifierfacbydata", ".png"
-), plot, device = "png")
+), plot, device = "png", width = 7, height = 14)
 
 
 # Graph for each dataset, coloured nmodel, facet by classifier
