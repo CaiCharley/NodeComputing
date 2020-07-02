@@ -1,5 +1,5 @@
 # wrangle IFN Data
-setwd("C:/Users/User/Downloads/Temp/IFN MS")
+setwd("D:/Downloads/Craig")
 
 # load libraries
 library(tidyverse)
@@ -13,7 +13,8 @@ files <- map(file_name, ~ read_csv(., col_types = cols(
   Gene = col_character(),
   .default = col_double()
 )) %>%
-  select(-Gene)) %>%
+  select(-Gene) %>% 
+  column_to_rownames(var= "Protein")) %>%
   setNames(str_replace(file_name, ".csv$", ""))
 
 # save data
