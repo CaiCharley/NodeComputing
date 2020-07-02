@@ -3,8 +3,8 @@ setwd("C:/Users/Charley/OneDrive/Academic/Foster Lab/PrInCER/CC/data/wan")
 library(tidyverse)
 library(magrittr)
 
-files <- list.files(getwd()) %>% map(~ readRDS(.))
-proteosome <- c("P60900", "F4JC97")
+files <- list.files(getwd()) %>% map(~ readRDS(.) %>% rownames_to_column(var = "Protein"))
+proteosome <- c("P60900", "F4JC97", "P25786", "P25789")
 
 for (prot in proteosome) {
   for (i in seq_along(files)) {
@@ -15,10 +15,7 @@ for (prot in proteosome) {
   }
 }
 
-tbl <- as_tibble(`5P60900`[-1]) %>% transpose() %>% mutate()
-tbl1 <- tbl[[1]] %>% as_tibble()
+lst <- as.list(`3P25789`[-1])
 
-# tbl <- tibble(count = `5P60900`[-1], fraction = seq_along(`5P60900`[-1]))
-
-ggplot(tbl) +
-  geom_path(aes(fraction, as.numeric(count)))
+ggplot() +
+  geom_path(aes(seq_along(lst), as.numeric(lst)))
