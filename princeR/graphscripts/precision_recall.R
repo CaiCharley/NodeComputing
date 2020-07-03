@@ -10,7 +10,7 @@ library(magrittr)
 files <- list.files(getwd(), pattern = "*.csv.gz") # !
 
 ppi_list <- map(files, ~ read_csv(.,
-  n_max = 500000,
+  n_max = 100000,
   col_types = cols(
     X1 = col_character(),
     protein_A = col_character(),
@@ -37,7 +37,7 @@ ppis %<>% mutate(
 ppis %<>% filter(nmodels == 1)
 plot <- ggplot(ppis) +
   geom_path(aes(n, precision, color = as.factor(classifier))) +
-  facet_wrap(~dataset, nrow = 2) +
+  facet_wrap(~dataset, nrow = 3) +
   ggtitle("Nmodels = 1") +
   ylab("Precision") +
   xlab("Predicted Interaction #") +
@@ -45,7 +45,7 @@ plot <- ggplot(ppis) +
 ggsave(paste0(
   "~/projects/rrg-ljfoster-ab/caic/princeR/ppis/graphs/",
   "colbyclassifierfacbydata", ".png"
-), plot, device = "png")
+), plot, device = "png", width = 14, height = 7)
 
 
 # Graph for each dataset, coloured nmodel, facet by classifier

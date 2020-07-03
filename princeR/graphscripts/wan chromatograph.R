@@ -3,7 +3,8 @@ setwd("C:/Users/Charley/OneDrive/Academic/Foster Lab/PrInCER/CC/data/wan")
 library(tidyverse)
 library(magrittr)
 
-files <- list.files(getwd()) %>% map(~ readRDS(.) %>% rownames_to_column(var = "Protein"))
+files <- list.files(getwd()) %>%
+  map(~ readRDS(.) %>% rownames_to_column(var = "Protein"))
 proteosome <- c("P60900", "F4JC97", "P25786", "P25789")
 
 for (prot in proteosome) {

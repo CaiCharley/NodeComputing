@@ -48,7 +48,7 @@ input_files <- list.files(input_dir, "[^goldstd.rds]", full.names = T)
 options <- list(
   input_file = input_files, # make sure input_file is first
   classifier = c("NB", "SVM", "RF", "LR", "ensemble"),
-  nmodels = c(1, 3, 10)
+  nmodels = c(1)
 )
 
 grid <- expand.grid(options, stringsAsFactors = F)
