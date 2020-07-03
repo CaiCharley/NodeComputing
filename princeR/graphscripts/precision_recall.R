@@ -19,7 +19,8 @@ read_with_pb <- function(file) {
       score = col_double(),
       label = col_logical(),
       precision = col_double()
-    )
+    ),
+    progress = NULL
   ) %>%
     mutate(n = row_number())
 }
