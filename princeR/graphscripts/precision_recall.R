@@ -7,30 +7,38 @@ library(tidyverse)
 library(magrittr)
 
 # load data
-files <- list.files(getwd(), pattern = "*.csv.gz") # !
+files <- list.files(getwd(), pattern = "*.csv.gz$") # !
 
-ppi_list <- map(files, ~ read_csv(.,
-  n_max = 100000,
-  col_types = cols(
-    X1 = col_character(),
-    protein_A = col_character(),
-    score = col_double(),
-    label = col_logical(),
-    precision = col_double()
-  )
-) %>%
-  mutate(n = row_number())) %>%
+read_with_pb <- function(file) {
+  pb$tick()$print()
+  read_csv(file,
+    n_max = 100000,
+    col_types = cols(
+      X1 = col_character(),
+      protein_A = col_character(),
+      score = col_double(),
+      label = col_logical(),
+      precision = col_double()
+    )
+  ) %>%
+    mutate(n = row_number())
+}
+
+pb <- progress_estimated(length(files))
+ppi_list <- map(files, ~ read_with_pb(.)) %>%
   setNames(files)
 ppis <- bind_rows(ppi_list, .id = "filepath")
+message("Data Loaded")
 
-ppis %<>% mutate(
-  nmodels = as.numeric(str_extract(filepath, "(?<=nmodels=).*(?=.csv)")),
-  classifier = str_extract(filepath, "(?<=classifier=).*(?=-)"),
-  dataset = (sub("-.*", "", filepath))
-) %>%
+ppis %<>%
+  mutate(
+    nmodels = as.numeric(str_extract(filepath, "(?<=nmodels=).*(?=.csv)")),
+    classifier = str_extract(filepath, "(?<=classifier=).*(?=-)"),
+    dataset = (sub("-.*", "", filepath))
+  ) %>%
   select(-filepath, -protein_A, -protein_B) %>%
   filter(n %% 10 == 0)
-
+message("Data cleaned")
 # plot
 
 # Graph coloured by classifier, facet by dataset
