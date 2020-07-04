@@ -20,7 +20,7 @@ read_with_pb <- function(file) {
       label = col_logical(),
       precision = col_double()
     ),
-    progress = NULL
+    progress = F
   ) %>%
     mutate(n = row_number())
 }
