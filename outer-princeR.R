@@ -112,7 +112,7 @@ if (args$removelogs) {
 # submits job
 script <- file.path(
   getwd(), args$name,
-  paste0(args$name, "-", args$project, ".sh")
+  paste0(args$name, "_", args$project, ".sh")
 )
 
 if (args$submit) {

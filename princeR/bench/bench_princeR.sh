@@ -17,7 +17,7 @@ fi
 
 # R Script Location
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
-    RSCRIPTPATH=/home/caic/OneDrive/git/NodeComputing/princeR/$NAME/$NAME-princeR.R
+    RSCRIPTPATH=/home/caic/OneDrive/git/NodeComputing/princeR/$NAME/${NAME}_princeR.R
 else
     RSCRIPTPATH=./$1-princeR.R
 fi
