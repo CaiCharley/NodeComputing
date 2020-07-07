@@ -29,9 +29,16 @@ files %<>%
   map(~ bind_rows(., .id = "Replicate") %>%
     relocate(ProteinID))
 
+# get replicate and fraction number
+string_args <- function(datas) {
+   fractions <- map(datas, ~ ncol(.) - 2)
+   replicates <- map(datas, ~ unique(.["Replicate"]) %>% length())
+   sprintf("-frac=%i-rep=%i", fractions, replicates)
+}
+
 # save files
 map2(
-  files, paste0(file_names, ".csv") %>%
+  files, paste0(file_names, string_args(files), ".csv") %>%
     file.path(getwd(), "dataML", .),
   ~ write_csv(.x, .y)
 )
