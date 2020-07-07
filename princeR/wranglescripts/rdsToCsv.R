@@ -35,8 +35,9 @@ string_args <- function(datas) {
   replicates <- map_dbl(datas, ~ select(., "Replicate") %>%
     unique() %>%
     nrow())
-  fractions <- map_dbl(datas, ~ ncol(.) - 2)
-  sprintf("-frac=%i-rep=%i", fractions, replicates)
+  frac <-
+    map_dbl(datas, ~ ncol(.) - 2)
+  sprintf("-frac=%i-rep=%i", frac, replicates)
 }
 
 # save files
