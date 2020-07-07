@@ -26,12 +26,28 @@ files <- file_dirs %>%
 
 # aggregate replicates
 files %<>%
-  map(~ bind_rows(., .id = "Replicate") %>%
+  map(~ unname(.) %>%
+    bind_rows(.id = "Replicate") %>%
     relocate(ProteinID))
 
+# get replicate and fraction number
+string_args <- function(datas) {
+  replicates <- map_dbl(datas, ~ select(., "Replicate") %>%
+    unique() %>%
+    nrow())
+  frac <-
+    map_dbl(datas, ~ ncol(.) - 2)
+  sprintf("-frac=%i-rep=%i", frac, replicates)
+}
+
 # save files
+output_dir <- file.path(getwd(), "dataML")
+if (!dir.exists(output_dir)) {
+  dir.create(output_dir)
+}
+
 map2(
-  files, paste0(file_names, ".csv") %>%
-    file.path(getwd(), "dataML", .),
+  files, paste0(file_names, string_args(files), ".csv") %>%
+    file.path(output_dir, .),
   ~ write_csv(.x, .y)
 )
