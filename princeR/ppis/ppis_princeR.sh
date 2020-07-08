@@ -8,25 +8,30 @@
 # Runs PrInCE with set arguments
 cd $(dirname $(readlink -f $0))
 
-# load R if on Compute Canada
+# set node specific variables
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
+    # load R
     module load nixpkgs/16.09
     module load gcc/7.3.0
     module load r/4.0.0
-fi
 
-# R Script Location
-if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
+    # R Script Location
     RSCRIPTPATH=/home/caic/OneDrive/git/NodeComputing/princeR/$NAME/${NAME}_princeR.R
-else
-    RSCRIPTPATH=./$1-princeR.R
-fi
 
-# get job array
-if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
+    # get job array
     GRID_FILE=/home/caic/OneDrive/git/NodeComputing/princeR/$NAME/$NAME'_grid.txt'
+
+    # set output directory
+    OUTPUT_DIR=~/projects/rrg-ljfoster-ab/caic/princeR/$NAME
 else
+    # R Script Location
+    RSCRIPTPATH=./$1-princeR.R
+
+    # get job array
     GRID_FILE=./$1'_grid.txt'
+
+    # set output directory
+    OUTPUT_DIR=/home/charley/OneDrive/2019\ Term\ 1/Foster\ Lab/PrInCER/CC/$1
 fi
 
 # get job parameters from array job index
@@ -36,13 +41,6 @@ IFS=$'\t' PARAMS=($LINE)
 INPUT_FILE=${PARAMS[0]}
 CLASSIFIER=${PARAMS[1]}
 NMODELS=${PARAMS[2]}
-
-# set output directory !
-if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
-    OUTPUT_DIR=~/projects/rrg-ljfoster-ab/caic/princeR/$NAME
-else
-    OUTPUT_DIR=/home/charley/OneDrive/2019\ Term\ 1/Foster\ Lab/PrInCER/CC/$1
-fi
 
 # run inner R script
 Rscript $RSCRIPTPATH \
