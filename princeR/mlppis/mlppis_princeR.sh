@@ -19,7 +19,7 @@ if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
     OUTPUT_DIR=/home/caic/projects/rrg-ljfoster-ab/caic/princeR/$NAME
     
     # get coreComplexes
-    GOLDSTD=coreComplexes.txt
+    GOLDSTD=/home/caic/projects/rrg-ljfoster-ab/caic/princeR/dataML/coreComplexes.txt
 
     # get job array
     GRID_FILE=/home/caic/OneDrive/git/NodeComputing/princeR/$NAME/$NAME'_grid.txt'
@@ -52,4 +52,4 @@ fi
 
 # run inner R script
 cd $NOEXT
-matlab -nodisplay -nojvm -r "prince('${BASENAME}', '${GOLDSTD}', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); exit"
+matlab -nodisplay -nojvm -r "prince('${BASENAME}', 'coreComplexes.txt', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); exit"
