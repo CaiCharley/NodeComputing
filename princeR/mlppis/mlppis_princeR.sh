@@ -52,4 +52,4 @@ fi
 
 # run inner R script
 cd $NOEXT
-matlab -nodisplay -nojvm -r "prince('${BASENAME}', 'coreComplexes.txt', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); exit"
+matlab -nodisplay -nojvm -r "prince('${BASENAME}', 'coreComplexes.txt', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); disp('Done'); exit"
