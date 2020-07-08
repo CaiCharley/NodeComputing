@@ -47,11 +47,12 @@ NOEXT=${BASENAME/".csv"/""}
 if [[ ! -d $NOEXT ]]; then
     mkdir $NOEXT
     cp -a $MATLAB_DIR/* $NOEXT
+    
+    cd $NOEXT
+    cp $INPUT_FILE .
+    cp $GOLDSTD .
 fi
 
-cd $NOEXT
-cp $INPUT_FILE .
-cp $GOLDSTD .
-
 # run inner R script
+cd $NOEXT
 matlab -nodisplay -nojvm -r "prince('${BASENAME}', '${GOLDSTD}', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); exit"
