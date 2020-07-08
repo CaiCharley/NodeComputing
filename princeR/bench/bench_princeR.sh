@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --time=48:00:00
-#SBATCH --mem=16G
+#SBATCH --mem=32G
 #SBATCH --mail-user=charley.cai113@gmail.com
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
@@ -10,14 +10,14 @@ cd $(dirname $(readlink -f $0))
 
 # load R if on Compute Canada
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
-    module load nixpkgs/16.09
+    module load nixpkgs/16.09  
     module load gcc/7.3.0
     module load r/4.0.0
 fi
 
 # R Script Location
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
-    RSCRIPTPATH=/home/caic/OneDrive/git/NodeComputing/princeR/$NAME/$NAME-princeR.R
+    RSCRIPTPATH=/home/caic/OneDrive/git/NodeComputing/princeR/$NAME/${NAME}_princeR.R
 else
     RSCRIPTPATH=./$1-princeR.R
 fi
@@ -37,10 +37,10 @@ INPUT_FILE=${PARAMS[0]}
 CLASSIFIER=${PARAMS[1]}
 NMODELS=${PARAMS[2]}
 
-# set output directory !
+# set output directory
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
     OUTPUT_DIR=~/projects/rrg-ljfoster-ab/caic/princeR/$NAME
-else
+else 
     OUTPUT_DIR=/home/charley/OneDrive/2019\ Term\ 1/Foster\ Lab/PrInCER/CC/$1
 fi
 
@@ -49,4 +49,4 @@ Rscript $RSCRIPTPATH \
     --input_file "$INPUT_FILE" \
     --output_dir "$OUTPUT_DIR" \
     --classifier "$CLASSIFIER" \
-    --nmodels "$NMODELS"
+    --nmodels "$NMODELS" 

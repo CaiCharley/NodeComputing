@@ -8,10 +8,10 @@ parser$add_argument("--allocation",
   type = "character", default = "rrg-ljfoster-ab"
 )
 parser$add_argument("--name",
-  type = "character", required = T, choices = c("ppis", "bench")
+  type = "character", required = T
 )
 parser$add_argument("--project",
-  type = "character", default = "princeR", choices = c("princeR")
+  type = "character", default = "princeR"
 )
 parser$add_argument("-s", "--submit",
   action = "store_true", default = FALSE,
@@ -22,6 +22,14 @@ parser$add_argument("-r", "--removelogs",
   help = "Removes log files in which the job successfully completed"
 )
 args <- parser$parse_args()
+
+# check project and job directories exist
+if (!dir.exists(
+  file.path("~/OneDrive/git/NodeComputing", args$project, args$name)
+)) {
+  message("The project or job scripts folder does not exist.")
+  stop()
+}
 
 setwd(file.path("~/OneDrive/git/NodeComputing", args$project))
 
@@ -40,43 +48,32 @@ if (grepl("cedar", system)) {
   base_dir <- "/home/charley/OneDrive/Academic/Foster Lab/PrInCER/CC"
 }
 
-# list input files !
-input_dir <- file.path(base_dir, "scottdata")
-input_files <- list.files(input_dir, "[^goldstd.rds]", full.names = T)
-
-# generate grid of argument permutations !
-options <- list(
-  input_file = input_files, # make sure input_file is first
-  classifier = c("NB", "SVM", "RF", "LR", "ensemble"),
-  nmodels = c(1)
-)
-
-grid <- expand.grid(options, stringsAsFactors = F)
-colnames(grid) <- names(options)
-
 # set output directory
 output_dir <- file.path(base_dir, args$name)
 if (!dir.exists(output_dir)) {
   dir.create(output_dir, recursive = T)
 }
 
+# source job specific functions
+source(file.path(getwd(), args$name, "outer_helper.R"))
+
+# generate grid of argument permutations
+input_files <- get_inputs()
+options <- get_options()
+
+grid <- expand.grid(options, stringsAsFactors = F)
+colnames(grid) <- names(options)
+
+grid %<>% modify_grid()
+
 # check which jobs are already complete
 overwrite <- F
 if (!overwrite) {
   optionprefix <- paste0("-", names(options[-1]), "=")
   not_done <- vector("integer", nrow(grid))
-  for (job in seq_len(nrow(grid))) {
-    expected_output <- grid[job, "input_file"] %>%
-      basename() %>%
-      gsub("\\.rds$", "", .) # ! input file type
-    expected_output <-
-      paste0(
-        expected_output,
-        paste0(optionprefix, grid[job, names(options[-1])], collapse = ""),
-        ".csv.gz" # ! output file extension
-      )
-    if (!(file.path(output_dir, expected_output) %>% file.exists())) {
-      not_done[[job]] <- job
+  for (row in seq_len(nrow(grid))) {
+    if (!job_done(as.list(grid[row, ]))) {
+      not_done[[row]] <- row
     }
   }
   grid %<>% slice(not_done)
@@ -106,13 +103,14 @@ if (!dir.exists(logs_dir)) {
 
 if (args$removelogs) {
   system(paste(
-    file.path(dirname(getwd()), "remove_logs.sh"), logs_dir))
+    file.path(dirname(getwd()), "remove_logs.sh"), logs_dir
+  ))
 }
 
 # submits job
 script <- file.path(
   getwd(), args$name,
-  paste0(args$name, "-", args$project, ".sh")
+  paste0(args$name, "_", args$project, ".sh")
 )
 
 if (args$submit) {
