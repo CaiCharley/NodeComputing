@@ -6,9 +6,6 @@
 #SBATCH --mail-type=FAIL
 
 # Runs PrInCE with set arguments
-# for testing !!!
-SLURM_ARRAY_TASK_ID=1
-NAME=mlppis
 
 # set node specific variables
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
