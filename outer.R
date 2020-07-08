@@ -1,5 +1,4 @@
 # Submits job arrays to Compute Canada node
-# "!" indicated things user may need to change
 
 # parse arguments
 library(argparse)
