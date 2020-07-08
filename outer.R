@@ -40,43 +40,32 @@ if (grepl("cedar", system)) {
   base_dir <- "/home/charley/OneDrive/Academic/Foster Lab/PrInCER/CC"
 }
 
-# list input files !
-input_dir <- file.path(base_dir, "scottdata")
-input_files <- list.files(input_dir, "[^goldstd.rds]", full.names = T)
-
-# generate grid of argument permutations !
-options <- list(
-  input_file = input_files, # make sure input_file is first
-  classifier = c("NB", "SVM", "RF", "LR", "ensemble"),
-  nmodels = c(1)
-)
-
-grid <- expand.grid(options, stringsAsFactors = F)
-colnames(grid) <- names(options)
-
 # set output directory
 output_dir <- file.path(base_dir, args$name)
 if (!dir.exists(output_dir)) {
   dir.create(output_dir, recursive = T)
 }
 
+# source job specific functions
+source(file.path(getwd(), args$name, "outer_helper.R"))
+
+# generate grid of argument permutations
+input_files <- get_inputs()
+options <- get_options()
+
+grid <- expand.grid(options, stringsAsFactors = F)
+colnames(grid) <- names(options)
+
+grid %<>% modify_grid()
+
 # check which jobs are already complete
 overwrite <- F
 if (!overwrite) {
   optionprefix <- paste0("-", names(options[-1]), "=")
   not_done <- vector("integer", nrow(grid))
-  for (job in seq_len(nrow(grid))) {
-    expected_output <- grid[job, "input_file"] %>%
-      basename() %>%
-      gsub("\\.rds$", "", .) # ! input file type
-    expected_output <-
-      paste0(
-        expected_output,
-        paste0(optionprefix, grid[job, names(options[-1])], collapse = ""),
-        ".csv.gz" # ! output file extension
-      )
-    if (!(file.path(output_dir, expected_output) %>% file.exists())) {
-      not_done[[job]] <- job
+  for (row in seq_len(nrow(grid))) {
+    if (!job_done(as.list(grid[row, ]))) {
+      not_done[[row]] <- row
     }
   }
   grid %<>% slice(not_done)
