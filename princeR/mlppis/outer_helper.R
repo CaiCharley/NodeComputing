@@ -30,10 +30,5 @@ modify_grid <- function(tbl) {
 # checks to see if job is done
 # list -> boolean
 job_done <- function(job) {
-  file.path(
-    output_dir,
-    str_replace(job[["basename"]], ".csv", ""),
-    "ppi_list.csv"
-  ) %>%
-    file.exists()
+    file.exists(job[["output_file"]])
 }

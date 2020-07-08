@@ -33,7 +33,7 @@ LINE=$(sed "${LINE_IDX}q;d" "$GRID_FILE")
 IFS=$'\t' PARAMS=($LINE)
 INPUT_FILE=${PARAMS[0]}
 BASENAME=${PARAMS[1]}
-OUTPUT_FILE="ppi_list.csv"
+OUTPUT_FILE=${PARAMS[2]}
 FRACTIONS=${PARAMS[3]}
 REPLICATES=${PARAMS[4]}
 
@@ -52,3 +52,7 @@ fi
 # run inner R script
 cd $NOEXT
 matlab -nodisplay -nojvm -r "prince('${BASENAME}', 'coreComplexes.txt', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); disp('Done'); exit"
+
+# cleanup 
+cd rm -r ../$NOEXT
+echo Done
