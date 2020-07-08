@@ -17,7 +17,7 @@ if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
 
     # get output directory
     OUTPUT_DIR=/home/caic/projects/rrg-ljfoster-ab/caic/princeR/$NAME
-    
+
     # get coreComplexes
     GOLDSTD=/home/caic/projects/rrg-ljfoster-ab/caic/princeR/dataML/coreComplexes.txt
 
@@ -26,7 +26,6 @@ if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
 else
     GRID_FILE=./$1'_grid.txt'
 fi
-
 
 # get job parameters from array job index
 LINE_IDX=$((SLURM_ARRAY_TASK_ID + 1))
@@ -44,7 +43,7 @@ NOEXT=${BASENAME/".csv"/""}
 if [[ ! -d $NOEXT ]]; then
     mkdir $NOEXT
     cp -a $MATLAB_DIR/* $NOEXT
-    
+
     cd $NOEXT
     cp $INPUT_FILE .
     cp $GOLDSTD .
