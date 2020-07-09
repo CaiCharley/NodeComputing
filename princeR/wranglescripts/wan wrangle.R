@@ -6,7 +6,7 @@ library(tidyverse)
 library(magrittr)
 
 # load data
-names <- paste0("wan_iBAQ_", 1:9)
+names <- paste0("wan_iBAQ_", 1:11)
 
 file_dirs <- list.files(getwd())
 files <- map(file_dirs, ~ readRDS(.) %>%
@@ -15,10 +15,14 @@ files <- map(file_dirs, ~ readRDS(.) %>%
     Protein = str_replace(Proteins, ";.*$", ""),
     .after = 1, .keep = "unused"
   ) %>%
-  column_to_rownames(var = "Protein") %>%
-  mutate_all(~ na_if(., 0))) %>%
+  mutate_if(is.numeric, ~ na_if(., 0)) %>%
+  column_to_rownames(var = "Protein")) %>%
   setNames(names)
 
+# save each individually
 for (i in seq_along(files)) {
   saveRDS(files[[i]], paste0(names[i], ".rds"))
 }
+
+# save all as replicates
+saveRDS(files, "wan_all_replicates.rds")
