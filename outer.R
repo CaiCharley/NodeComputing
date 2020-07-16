@@ -1,5 +1,4 @@
 # Submits job arrays to Compute Canada node
-# "!" indicated things user may need to change
 
 # parse arguments
 library(argparse)
@@ -8,10 +7,10 @@ parser$add_argument("--allocation",
   type = "character", default = "rrg-ljfoster-ab"
 )
 parser$add_argument("--name",
-  type = "character", required = T, choices = c("ppis", "bench")
+  type = "character", required = T
 )
 parser$add_argument("--project",
-  type = "character", default = "princeR", choices = c("princeR")
+  type = "character", default = "princeR"
 )
 parser$add_argument("-s", "--submit",
   action = "store_true", default = FALSE,
@@ -22,6 +21,14 @@ parser$add_argument("-r", "--removelogs",
   help = "Removes log files in which the job successfully completed"
 )
 args <- parser$parse_args()
+
+# check project and job directories exist
+if (!dir.exists(
+  file.path("~/OneDrive/git/NodeComputing", args$project, args$name)
+)) {
+  message("The project or job scripts folder does not exist.")
+  stop()
+}
 
 setwd(file.path("~/OneDrive/git/NodeComputing", args$project))
 
@@ -95,7 +102,8 @@ if (!dir.exists(logs_dir)) {
 
 if (args$removelogs) {
   system(paste(
-    file.path(dirname(getwd()), "remove_logs.sh"), logs_dir))
+    file.path(dirname(getwd()), "remove_logs.sh"), logs_dir
+  ))
 }
 
 # submits job

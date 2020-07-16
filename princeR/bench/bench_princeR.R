@@ -71,6 +71,4 @@ if (!file.exists(benchmarks_path)) {
   saveRDS(benchmarks, benchmarks_path)
 }
 
-# write out (only to update grid file)
-write(NULL, file = paste0(output_file, ".gz"))
 message("Done")
