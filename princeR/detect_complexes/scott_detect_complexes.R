@@ -24,21 +24,24 @@ joined_complexes <- reduce(scott_complexes, full_join, by = "complex") %>%
   set_colnames(names(scott_complexes))
 joined_complexes[is.na(joined_complexes)] <- 0
 
+# filter significant complexes in at least one sample
+significant_complexes <- joined_complexes %>% 
+  as_tibble(rownames = "complex") %>% 
+  rowwise() %>% 
+  mutate(
+    nsig = sum(c_across(where(is.numeric)) >= 1.96),
+    bnsig = sum(c_across(contains("bn")) >= 1.96),
+    secsig = sum(c_across(contains("sec")) >= 1.96),
+    ) %>% # ! z score
+  filter(bnsig >= 0 && secsig == 3) %>% # ! number of significant replicates
+  select(-nsig, -bnsig, -secsig) %>% 
+  column_to_rownames(var = "complex")
+
 # hcluster rows and columns
 rlevels <- hclust(dist(as.matrix(significant_complexes)))
 rlevels <- rlevels$labels[rlevels$order]
 clevels <- hclust(dist(t(as.matrix(significant_complexes))))
 clevels <- clevels$labels[clevels$order]
-
-# filter significant complexes in at least one sample
-significant <- vector("integer", nrow(joined_complexes))
-for (complex in seq(nrow(joined_complexes))) {
-  if (max(joined_complexes[complex, ]) >= 1.96) {
-    significant[[complex]] <- complex
-  }
-}
-
-significant_complexes <- slice(joined_complexes, significant)
 
 # make tidy tibble
 tidy_complexes <- pivot_longer(
@@ -53,8 +56,7 @@ tidy_complexes <- pivot_longer(
 tidy_complexes %<>%
   mutate(
     complex = factor(complex, levels = rlevels),
-    dataset = factor(dataset, levels = clevels),
-    complex = str_sub(complex, end = 30) # ! cuts off long names
+    dataset = factor(dataset, levels = clevels)
   )
 
 # make heatmap
@@ -62,5 +64,5 @@ ggplot(tidy_complexes, aes(x = dataset, y = complex, fill = zscore)) +
   geom_tile() +
   theme(text = element_text(size = 20))
 ggsave(
-  "heatmap.png",
-  plot = last_plot(), device = "png", width = 20, height = 25)
+  "heatmap_0bn3sec.png",
+  plot = last_plot(), device = "png", width = 30, height = 25)
