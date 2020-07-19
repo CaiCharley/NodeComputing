@@ -1,5 +1,5 @@
 # generate heatmap with detect_complexes on scott dataset
-setwd("/mnt/d/Downloads/scottdata")
+setwd("/mnt/c/Users/User/Downloads/scottdata")
 
 library(tidyverse)
 library(magrittr)
