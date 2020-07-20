@@ -6,9 +6,10 @@ library(tidyverse)
 library(magrittr)
 
 # load ML ppis
-mlfiles <- list.files(file.path(getwd(), "mlppis"), 
+mlfiles <- list.files(file.path(getwd(), "mlppis"),
   full.names = T,
-  pattern = "*.csv$") # !
+  pattern = "*.csv$"
+) # !
 
 readml_with_pb <- function(file) {
   pb$tick()$print()
@@ -33,12 +34,12 @@ mlppi_list %<>% map(~ mutate(.,
 mlppis <- map(mlppi_list, ~ cbind(.,
   precision = calculate_precision(as_vector(select(., label)))
 ))
-mlppis %<>% 
-  bind_rows(.id = "filepath") %>% 
+mlppis %<>%
+  bind_rows(.id = "filepath") %>%
   mutate(
     version = "ML",
     dataset = str_extract(filepath, "^.*(?=\\-frac.*)")
-    )
+  )
 
 # load R ppis
 rfiles <- list.files(file.path(getwd(), "ppis"),
