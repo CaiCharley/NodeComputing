@@ -1,8 +1,9 @@
 # generate heatmap with detect_complexes on scott dataset
-setwd("/mnt/c/Users/User/Downloads/scottdata")
+setwd("D:/Downloads/scottdata")
 
 library(tidyverse)
 library(magrittr)
+library(PrInCE)
 library(pals)
 
 # load data as individual list element
@@ -25,7 +26,7 @@ joined_complexes <- reduce(scott_complexes, full_join, by = "complex") %>%
   set_colnames(names(scott_complexes))
 joined_complexes[is.na(joined_complexes)] <- 0
 
-# filter significant complexes in at least one sample
+# filter significant complexes
 significant_complexes <- joined_complexes %>%
   as_tibble(rownames = "complex") %>%
   rowwise() %>%
@@ -34,10 +35,13 @@ significant_complexes <- joined_complexes %>%
     bnsig = sum(c_across(contains("bn")) >= 1.96),
     secsig = sum(c_across(contains("sec")) >= 1.96),
   ) %>% # ! z score
-  filter(bnsig >= 3 && secsig == 0) %>% # ! number of significant replicates
-  # filter(nsig >= 3) %>% # ! number of significant replicates
+  #filter(bnsig >= 3 && secsig == 0) %>% # ! number of significant replicates
+  filter(nsig >= 6) %>% # ! number of significant replicates
   select(-nsig, -bnsig, -secsig) %>%
   column_to_rownames(var = "complex")
+
+zcap <- 5
+name <- "Significant in 6+"
 
 # hcluster rows and columns
 rlevels <- hclust(dist(as.matrix(significant_complexes)))
@@ -52,7 +56,8 @@ tidy_complexes <- pivot_longer(
   cols = is_numeric,
   names_to = "dataset",
   values_to = "zscore"
-)
+) %>%
+  mutate(zscore = ifelse(zscore > zcap, zcap, zscore)) # ! cap at zcap
 
 # cluster
 tidy_complexes %<>%
@@ -64,7 +69,12 @@ tidy_complexes %<>%
 # make heatmap
 ggplot(tidy_complexes, aes(x = dataset, y = complex, fill = zscore)) +
   geom_tile(color = "white") +
-  scale_fill_gradientn(colours = gnuplot(25), guide = "colourbar") +
+  ggtitle(name) +
+  scale_fill_gradientn(
+    colours = ocean.thermal(25),
+    guide = guide_colorbar("z score", frame.colour = "black", ticks = F),
+    breaks = c(0, zcap)
+  ) +
   scale_x_discrete(
     expand = c(0, 0),
     breaks = clevels,
@@ -79,7 +89,7 @@ ggplot(tidy_complexes, aes(x = dataset, y = complex, fill = zscore)) +
   ) +
   scale_y_discrete(expand = c(0, 0)) +
   theme(
-    text = element_text(size = 10, family = "TT Arial"),
+    text = element_text(size = 8, family = "sans"),
     axis.text.x = element_text(angle = 45, hjust = 1),
     panel.border = element_rect(color = "grey50", fill = NA),
     aspect.ratio = 1,
@@ -90,9 +100,11 @@ ggplot(tidy_complexes, aes(x = dataset, y = complex, fill = zscore)) +
     axis.line = element_blank(),
     axis.ticks = element_blank(),
     axis.title.x = element_blank(),
-    axis.title.y = element_blank()
+    axis.title.y = element_blank(),
+    legend.key.width = unit(0.25, "lines"),
+    legend.key.height = unit(2, "lines")
   )
 ggsave(
-  "heatmap_3bn0sec.png",
-  plot = last_plot(), device = "png", unit = "cm", width = 15, height = 10
+  paste0(name, ".png"),
+  plot = last_plot(), device = "png", unit = "cm", width = 30, height = 30
 )
