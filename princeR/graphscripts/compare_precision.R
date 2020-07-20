@@ -61,6 +61,7 @@ readr_with_pb <- function(file) {
     ),
     progress = F
   ) %>%
+    filter(!is.na(precision)) %>%
     mutate(n = row_number(), .before = 1) %>%
     select(-protein_A, -protein_B)
   names(df)[names(df) == "X1"] <- "Unique interactions"
