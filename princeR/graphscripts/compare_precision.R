@@ -79,15 +79,14 @@ rppis %<>%
     dataset = (sub("-.*", "", filepath)),
     version = "R"
   ) %>%
-  select(-filepath) %>%
-  filter((n %% 10 == 0) && (n > 10000))
+  select(-filepath)
 
 # combine ppis and plot
 ppis <- bind_rows(mlppis, rppis)
 ggplot(ppis) +
   geom_path(aes(n, precision, colour = version)) +
   facet_wrap(~dataset, nrow = 3) +
-  ggtitle("Matlab Precision Recall") +
+  ggtitle("Compare ML/R Precision") +
   ylab("Precision") +
   xlab("Predicted Interaction #") +
   scale_color_discrete(name = "Classifier")
