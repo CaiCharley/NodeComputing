@@ -51,7 +51,7 @@ rfiles <- list.files(file.path(getwd(), "ppis"),
 readr_with_pb <- function(file) {
   pb$tick()$print()
   df <- read_csv(file,
-    n_max = 100000,
+    n_max = 50000,
     col_types = cols(
       X1 = col_character(),
       protein_A = col_character(),
@@ -80,7 +80,7 @@ rppis %<>%
     version = "R"
   ) %>%
   select(-filepath) %>%
-  filter(n %% 10 == 0)
+  filter((n %% 10 == 0) && (n > 10000))
 
 # combine ppis and plot
 ppis <- bind_rows(mlppis, rppis)
