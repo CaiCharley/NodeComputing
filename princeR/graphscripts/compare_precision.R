@@ -4,6 +4,7 @@ setwd("/home/caic/projects/rrg-ljfoster-ab/caic/princeR/")
 
 library(tidyverse)
 library(magrittr)
+library(PrInCE)
 
 # load ML ppis
 mlfiles <- list.files(file.path(getwd(), "mlppis"),
