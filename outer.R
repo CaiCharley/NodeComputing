@@ -89,7 +89,7 @@ grid_path <- file.path(
 )
 
 if (args$submitgrid) {
-  grid <- read.table(grid_path)
+  grid <- read.table(grid_path, header = T)
   message(sprintf(
     "%d jobs remaining.\nUsing current %s grid file at %s.",
     nrow(grid), args$name, grid_path
