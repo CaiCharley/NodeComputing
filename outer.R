@@ -89,7 +89,11 @@ grid_path <- file.path(
 )
 
 if (args$submitgrid) {
-  message(paste("Using current grid at", grid_path))
+  grid <- read.table(grid_path)
+  message(sprintf(
+    "%d jobs remaining.\nUsing current %s grid file at %s.",
+    nrow(grid), args$name, grid_path
+  ))
 } else if (plyr::empty(grid)) {
   message("All Jobs Completed")
 } else {
