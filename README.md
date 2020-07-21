@@ -11,6 +11,7 @@ The script takes three arguments:
 * --project: The name of the project folder
 * --name: The name of the job array
 * -s: Flag whether to submit the job. Otherwise only updates grid file
+* -g: Flag whether to submit the job without updating grid file
 * -r: Flag whether to remove output logs of successfully completed jobs
 
 Saved with name:

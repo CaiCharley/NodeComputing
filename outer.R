@@ -20,6 +20,10 @@ parser$add_argument("-r", "--removelogs",
   action = "store_true", default = FALSE,
   help = "Removes log files in which the job successfully completed"
 )
+parser$add_argument("-g", "--submitgrid",
+  action = "store_true", default = FALSE,
+  help = "Submits job without overwriting current grid file"
+)
 args <- parser$parse_args()
 
 # check project and job directories exist
@@ -79,13 +83,20 @@ if (!overwrite) {
 }
 
 # write grid
-if (plyr::empty(grid)) {
+grid_path <- file.path(
+  getwd(), args$name,
+  paste(args$name, "grid.txt", sep = "_")
+)
+
+if (args$submitgrid) {
+  grid <- read.table(grid_path, header = T)
+  message(sprintf(
+    "%d user specified jobs remaining.\nUsing current %s grid file at %s.",
+    nrow(grid), args$name, grid_path
+  ))
+} else if (plyr::empty(grid)) {
   message("All Jobs Completed")
 } else {
-  grid_path <- file.path(
-    getwd(), args$name,
-    paste(args$name, "grid.txt", sep = "_")
-  )
   write.table(grid, grid_path, quote = F, row.names = F, sep = "\t")
   message(sprintf(
     "%d jobs remaining.\nUpdated %s grid file at %s.",
@@ -112,7 +123,7 @@ script <- file.path(
   paste0(args$name, "_", args$project, ".sh")
 )
 
-if (args$submit) {
+if (args$submit || args$submitgrid) {
   if (grepl("cedar", system)) {
     system(
       sprintf(

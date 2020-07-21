@@ -1,6 +1,6 @@
 # create precision recall curve from Prince Data
-setwd("/home/caic/projects/rrg-ljfoster-ab/caic/princeR/ppis/")
-# setwd("/mnt/d/Downloads/tmpcc/")
+# setwd("/home/caic/projects/rrg-ljfoster-ab/caic/princeR/ppis/")
+setwd("/mnt/d/Downloads/ppis/ppis/")
 
 # load libraries
 library(tidyverse)
@@ -11,7 +11,7 @@ files <- list.files(getwd(), pattern = "*.csv.gz$") # !
 
 read_with_pb <- function(file) {
   pb$tick()$print()
-  read_csv(file,
+  df <- read_csv(file,
     n_max = 100000,
     col_types = cols(
       X1 = col_character(),
@@ -22,7 +22,10 @@ read_with_pb <- function(file) {
     ),
     progress = F
   ) %>%
-    mutate(n = row_number())
+    mutate(n = row_number(), .before = 1) %>%
+    select(-protein_A, -protein_B)
+  names(df)[names(df) == "X1"] <- "Unique interactions"
+  return(df)
 }
 
 pb <- progress_estimated(length(files))
@@ -37,7 +40,7 @@ ppis %<>%
     classifier = str_extract(filepath, "(?<=classifier=).*(?=-)"),
     dataset = (sub("-.*", "", filepath))
   ) %>%
-  select(-filepath, -protein_A, -protein_B) %>%
+  select(-filepath) %>%
   filter(n %% 10 == 0)
 message("Data cleaned")
 # plot
