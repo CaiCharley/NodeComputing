@@ -83,15 +83,16 @@ if (!overwrite) {
 }
 
 # write grid
+grid_path <- file.path(
+  getwd(), args$name,
+  paste(args$name, "grid.txt", sep = "_")
+)
+
 if (args$submitgrid) {
   message(paste("Using current grid at", grid_path))
 } else if (plyr::empty(grid)) {
   message("All Jobs Completed")
 } else {
-  grid_path <- file.path(
-    getwd(), args$name,
-    paste(args$name, "grid.txt", sep = "_")
-  )
   write.table(grid, grid_path, quote = F, row.names = F, sep = "\t")
   message(sprintf(
     "%d jobs remaining.\nUpdated %s grid file at %s.",
