@@ -24,7 +24,7 @@ read_diffrac <- function(file) {
     )
 }
 
-files <- list.files(getwd()) %>%
+files <- list.files(getwd(), ".txt.gz") %>%
   map(~ read_diffrac(.)) %>%
   setNames(str_remove(list.files(getwd()), ".txt.gz"))
 
@@ -80,7 +80,11 @@ tidycors <- bind_rows(
 )
 
 # add genes
-genekey <- files$Homo15406_control %>%
+genekey <- bind_rows(
+  files$Homo15406_control,
+  files$Mus14607_control,
+  files$Xenopus17650_rnase
+) %>%
   select(1, 2)
 
 tidycors %<>% left_join(genekey, "Protein") %>%
