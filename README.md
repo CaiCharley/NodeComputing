@@ -10,6 +10,7 @@ The outer R script generates a "grid" text file of all the permuations of input 
 The script takes three arguments:
 * --project: The name of the project folder
 * --name: The name of the job array
+* --run: Bypass slurm array and submit a single job. Useful for interactive session testing. Index starts at 1.
 * -s: Flag whether to submit the job. Otherwise only updates grid file
 * -g: Flag whether to submit the job without updating grid file
 * -r: Flag whether to remove output logs of successfully completed jobs

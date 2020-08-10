@@ -12,6 +12,10 @@ parser$add_argument("--name",
 parser$add_argument("--project",
   type = "character", default = "princeR"
 )
+parser$add_argument("--run",
+  type = "integer", default = -1,
+  help = "Bypass slurm array and run single job"
+)
 parser$add_argument("-s", "--submit",
   action = "store_true", default = FALSE,
   help = "Submits Job. Otherwise only updates grid"
@@ -129,10 +133,10 @@ if (args$submit || args$submitgrid) {
       sprintf(
         paste(
           "cd '%s'; sbatch --account=%s --job-name=%s --array=1-%d",
-          "--output=%s --export=ALL,NAME=%s,PROJECT=%s %s"
+          "--output=%s --export=ALL,NAME=%s,PROJECT=%s,RUN=%d %s"
         ),
         base_dir, args$allocation, args$name, nrow(grid), logs_path,
-        args$name, args$project, script
+        args$name, args$project, args$run, script
       )
     )
   } else {

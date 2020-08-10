@@ -27,8 +27,14 @@ else
     GRID_FILE=./$1'_grid.txt'
 fi
 
+# check if user specified individual job
+if [[ $RUN == -1 ]]; then
+    LINE_IDX=$((SLURM_ARRAY_TASK_ID + 1))
+else
+    LINE_IDX=$RUN
+fi
+
 # get job parameters from array job index
-LINE_IDX=$((SLURM_ARRAY_TASK_ID + 1))
 LINE=$(sed "${LINE_IDX}q;d" "$GRID_FILE")
 IFS=$'\t' PARAMS=($LINE)
 INPUT_FILE=${PARAMS[0]}
