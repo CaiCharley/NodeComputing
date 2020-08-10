@@ -1,4 +1,4 @@
-% function mlbench_princeR(data_filepath, allcomplexes_path, output_path, Nfraction, Nreplicate)
+function mlbench_princeR(data_filepath, allcomplexes_path, output_path, Nfraction, Nreplicate)
 
 % wrapper for MatLab PrInCE with runtime and RAM benchmarking
 
