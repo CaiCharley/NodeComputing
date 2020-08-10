@@ -7,6 +7,15 @@
 
 # Runs PrInCE with set arguments
 
+# check if script is called with arguments
+if [ -z ${1+x} ]; then
+    LINE_IDX=$((SLURM_ARRAY_TASK_ID + 1))
+else
+    PROJECT=$1
+    NAME=$2
+    LINE_IDX=$3
+fi
+
 # set node specific variables
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
     # load matlab
@@ -25,13 +34,6 @@ if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
     GRID_FILE=/home/caic/OneDrive/git/NodeComputing/princeR/$NAME/$NAME'_grid.txt'
 else
     GRID_FILE=./$1'_grid.txt'
-fi
-
-# check if user specified individual job
-if [[ $RUN == -1 ]]; then
-    LINE_IDX=$((SLURM_ARRAY_TASK_ID + 1))
-else
-    LINE_IDX=$RUN
 fi
 
 # get job parameters from array job index

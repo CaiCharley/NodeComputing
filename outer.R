@@ -38,6 +38,11 @@ if (!dir.exists(
   stop()
 }
 
+if (args$run != -1 && (args$submitgrid || args$submit)) {
+  message("Either an array is submitted or a single job specified. Not both.")
+  stop()
+}
+
 setwd(file.path("~/OneDrive/git/NodeComputing", args$project))
 
 # load libraries
@@ -127,6 +132,7 @@ script <- file.path(
   paste0(args$name, "_", args$project, ".sh")
 )
 
+# submits batch job
 if (args$submit || args$submitgrid) {
   if (grepl("cedar", system)) {
     system(
@@ -142,4 +148,14 @@ if (args$submit || args$submitgrid) {
   } else {
     system(paste(script, args$name))
   }
+}
+
+# submits single job
+if (args$run != -1) {
+  system(
+    sprintf(
+      "%s %s %s %d",
+      script, args$project, args$name, args$run
+    )
+  )
 }
