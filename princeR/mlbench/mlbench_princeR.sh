@@ -32,6 +32,9 @@ if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
 
     # get job array
     GRID_FILE=/home/caic/OneDrive/git/NodeComputing/princeR/$NAME/$NAME'_grid.txt'
+
+    # get Prince benchmark function
+    BENCH_FN=/home/caic/OneDrive/git/NodeComputing/princeR/$NAME/mlbench_princeR.m
 else
     GRID_FILE=./$1'_grid.txt'
 fi
@@ -55,6 +58,7 @@ if [[ ! -d $NOEXT ]]; then
     cd $NOEXT
     cp $INPUT_FILE .
     cp $GOLDSTD .
+    cp $BENCH_FN .
 fi
 
 # run inner R script
