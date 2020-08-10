@@ -155,7 +155,7 @@ if (args$run != -1) {
   system(
     sprintf(
       "%s %s %s %d",
-      script, args$project, args$name, args$run
+      script, args$project, args$name, args$run + 1
     )
   )
 }
