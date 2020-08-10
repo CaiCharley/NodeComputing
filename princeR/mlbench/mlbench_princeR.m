@@ -3,12 +3,13 @@
 % wrapper for MatLab PrInCE with runtime and RAM benchmarking
 
 tic
-s = 10000
-for c = 1:s
-    for r = 1:s
-        H(r,c) = 1/(r+c-1);
-    end
-end
+prince(data_filepath, 'coreComplexes.txt', output_path, Nfraction, Nreplicate)
 walltime = toc
 
-fprintf('%.2f seconds\n',walltime)
+outputfile = strrep(data_filepath, '.csv', '.out')
+
+fileID = fopen(outputfile,'w');
+fprintf(fileID, '%.2f-seconds\n', walltime);
+fclose(fileID)
+
+exit

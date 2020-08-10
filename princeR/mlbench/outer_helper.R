@@ -30,5 +30,5 @@ modify_grid <- function(tbl) {
 # checks to see if job is done
 # list -> boolean
 job_done <- function(job) {
-  # !!!
+  file.exists(job[["output_file"]])
 }
