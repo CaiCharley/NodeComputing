@@ -67,5 +67,5 @@ bn_unstim <- inner_join(
   (e1 != e2 | (is.na(e1) & !is.na(e2)) | (is.na(e2) & !is.na(e1))) &
     !(is.na(e1) & is.na(e2))
 }
-stim_descrep <- filter(bn_stim, label.r %!=na% label.ml)
+stim_descrep <- filter(bn_stim, label.r %noteq% label.ml)
 unstim_descrep <- filter(bn_unstim, label.r %noteq% label.ml)
