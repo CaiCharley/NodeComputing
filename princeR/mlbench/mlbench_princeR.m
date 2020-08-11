@@ -9,7 +9,7 @@ walltime = toc
 outputfile = strrep(data_filepath, '.csv', '.out')
 
 fileID = fopen(outputfile,'w');
-fprintf(fileID, '%.2f-seconds\n', walltime);
+fprintf(fileID, '%.2f-totalseconds\n', walltime);
 fclose(fileID)
 
 exit
