@@ -89,3 +89,5 @@ genekey <- bind_rows(
 
 tidycors %<>% left_join(genekey, "Protein") %>%
   relocate(Gene, .after = Protein)
+
+saveRDS(tidycors, "autocorrelations.R")
