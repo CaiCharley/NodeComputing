@@ -14,7 +14,8 @@ wrangle_kerr <- function(file) {
       Protein = col_character(),
       Gene = col_character(),
       .default = col_double()
-    )
+    ),
+    col_names = T
   ) %>%
     select(-Gene) %>%
     column_to_rownames(var = "Protein") %>%
