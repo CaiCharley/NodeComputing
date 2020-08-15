@@ -2,14 +2,16 @@ function mlbench_princeR(data_filepath, allcomplexes_path, output_path, Nfractio
 
 % wrapper for MatLab PrInCE with runtime and RAM benchmarking
 
-tic
+start = clock;
 prince(data_filepath, 'coreComplexes.txt', output_path, Nfraction, Nreplicate)
-walltime = toc
+stop = clock;
+
+walltime = etime(stop, start)
 
 outputfile = strrep(data_filepath, '.csv', '.out')
 
 fileID = fopen(outputfile,'w');
-fprintf(fileID, '%.2f-totalseconds\n', walltime);
-fclose(fileID)
+fprintf(fileID, '%.2f-matlabwalltime\n', walltime);
+fclose(fileID);
 
-exit
+exit;
