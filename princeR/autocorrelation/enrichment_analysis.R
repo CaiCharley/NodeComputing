@@ -24,7 +24,7 @@ humanauto <- autocors %>%
 
 # run enrichment analysis
 calc_enrichment <- function(cor) {
-  fgseaSimple(
+  fgsea(
     rbps,
     pull(cor, value, name = Gene),
     nperm = 10^6,
