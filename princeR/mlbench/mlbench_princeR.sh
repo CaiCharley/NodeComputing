@@ -59,8 +59,9 @@ if [[ ! -d $NOEXT ]]; then
     cp $INPUT_FILE .
     cp $GOLDSTD .
     cp $BENCH_FN .
+else
+    cd $NOEXT
 fi
 
 # run inner R script
-cd $NOEXT
 /home/caic/OneDrive/git/NodeComputing/princeR/mlbench/memusg matlab -nodisplay -nojvm -r "mlbench_princeR('${BASENAME}', 'coreComplexes.txt', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); exit" >>${BASENAME/.csv/.out} 2>&1
