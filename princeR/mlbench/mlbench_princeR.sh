@@ -65,3 +65,5 @@ fi
 
 # run inner R script
 /home/caic/OneDrive/git/NodeComputing/princeR/mlbench/memusg matlab -nodisplay -nojvm -r "mlbench_princeR('${BASENAME}', 'coreComplexes.txt', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); exit" >>${BASENAME/.csv/.out} 2>&1
+
+echo Done
