@@ -139,10 +139,10 @@ if (args$submit || args$submitgrid) {
       sprintf(
         paste(
           "cd '%s'; sbatch --account=%s --job-name=%s --array=1-%d",
-          "--output=%s --export=ALL,NAME=%s,PROJECT=%s,RUN=%d %s"
+          "--output=%s --export=ALL,NAME=%s,PROJECT=%s %s"
         ),
         base_dir, args$allocation, args$name, nrow(grid), logs_path,
-        args$name, args$project, args$run, script
+        args$name, args$project, script
       )
     )
   } else {
