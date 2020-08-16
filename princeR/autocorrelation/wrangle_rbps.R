@@ -42,10 +42,12 @@ bao2018 <- list.files(getwd(), "Bao") %>%
 
 # enigmRBPs
 beckmann2015 <- list.files(getwd(), "Beckmann") %>%
-  read_excel(skip = 2) %>% 
+  read_excel(skip = 2) %>%
   filter(enigmRBP == "yes") %>%
-  transmute(Gene = `human mRNA interactomes_ENSEMBL Gene Name`,
-    Species = "Homo Sapiens")
+  transmute(
+    Gene = `human mRNA interactomes_ENSEMBL Gene Name`,
+    Species = "Homo Sapiens"
+  )
 
 
 # join datasets
