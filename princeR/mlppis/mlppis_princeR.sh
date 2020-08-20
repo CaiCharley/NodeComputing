@@ -7,6 +7,15 @@
 
 # Runs PrInCE with set arguments
 
+# check if script is called with arguments
+if [ -z ${1+x} ]; then
+    LINE_IDX=$((SLURM_ARRAY_TASK_ID + 1))
+else
+    PROJECT=$1
+    NAME=$2
+    LINE_IDX=$3
+fi
+
 # set node specific variables
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
     # load matlab
@@ -28,7 +37,6 @@ else
 fi
 
 # get job parameters from array job index
-LINE_IDX=$((SLURM_ARRAY_TASK_ID + 1))
 LINE=$(sed "${LINE_IDX}q;d" "$GRID_FILE")
 IFS=$'\t' PARAMS=($LINE)
 INPUT_FILE=${PARAMS[0]}
@@ -53,5 +61,5 @@ fi
 cd $NOEXT
 matlab -nodisplay -nojvm -r "prince('${BASENAME}', 'coreComplexes.txt', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); exit"
 
-# cleanup 
+# cleanup
 cd rm -r ../$NOEXT
