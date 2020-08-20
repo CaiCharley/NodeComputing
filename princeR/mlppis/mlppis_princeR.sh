@@ -55,11 +55,13 @@ if [[ ! -d $NOEXT ]]; then
     cd $NOEXT
     cp $INPUT_FILE .
     cp $GOLDSTD .
+else
+    cd $NOEXT
 fi
 
-# run inner R script
-cd $NOEXT
-matlab -nodisplay -nojvm -r "prince('${BASENAME}', 'coreComplexes.txt', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); exit"
+# run matlab PrInCE
+/home/caic/OneDrive/git/NodeComputing/princeR/mlppis/memusg -tH -o ../${BASENAME/.csv/.benchmark} matlab -nodisplay -nojvm -r "prince('${BASENAME}', 'coreComplexes.txt', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); exit"
 
 # cleanup
-cd rm -r ../$NOEXT
+# cd ..
+# rm -r $NOEXT
