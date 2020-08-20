@@ -18,8 +18,9 @@ fi
 
 # set node specific variables
 if [[ $SLURM_CLUSTER_NAME =~ "cedar" ]]; then
-    # load matlab
+    # load modules
     module load matlab/2018a
+    module load python/3.6
 
     # Master Matlab Folder Location
     MATLAB_DIR=/home/caic/projects/rrg-ljfoster-ab/caic/princeR/princeML
@@ -69,6 +70,6 @@ echo $FRACTIONS
 echo $REPLICATES
 
 # run inner R script
-/home/caic/OneDrive/git/NodeComputing/princeR/mlbench/memusg matlab -nodisplay -nojvm -r "mlbench_princeR('${BASENAME}', 'coreComplexes.txt', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); exit" >>${BASENAME/.csv/.out} 2>&1
+/home/caic/OneDrive/git/NodeComputing/princeR/mlbench/memusg -o ${BASENAME/.csv/.out} -H matlab -nodisplay -nojvm -r "mlbench_princeR('${BASENAME}', 'coreComplexes.txt', '${OUTPUT_FILE}', ${FRACTIONS}, ${REPLICATES}); exit"
 
 echo Done
