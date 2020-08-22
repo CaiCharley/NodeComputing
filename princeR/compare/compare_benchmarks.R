@@ -23,11 +23,12 @@ mlbenchmarks <- map(files, ~ readbench(.)) %>%
     version = "ML",
     .keep = "unused"
   ) %>%
-  relocate(dataset, .before = 1)
+  relocate(dataset, .before = 1) %>% 
+  filter(!is.na(`time(s)`))
 
 # import R benchmarks
 rbenchmarks <- readRDS("rbenchmarks.rds") %>%
-  filter(str_detect(expr, "NB-nmodels=1")) %>%
+  filter(str_detect(expr, "NB-nmodels=1$")) %>%
   transmute(
     dataset = str_remove(expr, "-classifier.*"),
     `time(s)` = median,
@@ -36,26 +37,34 @@ rbenchmarks <- readRDS("rbenchmarks.rds") %>%
   )
 
 # join benchmarks
+both <- intersect(rbenchmarks$dataset, mlbenchmarks$dataset)
+
 benchmarks <- bind_rows(rbenchmarks, mlbenchmarks) %>%
-  filter(!is.na(`time(s)`) || !is.na(`RAM(MB)`))
+  filter(dataset %in% both)
 
 # calculate significance
 timesig <- t.test(
   benchmarks %>%
     filter(version == "ML") %>%
-    select(`time(s)`),
+    arrange(dataset) %>%
+    pull(`time(s)`),
   benchmarks %>%
     filter(version == "R") %>%
-    select(`time(s)`),
+    arrange(dataset) %>%
+    pull(`time(s)`),
+  paired = T
 )
 
 ramsig <- t.test(
   benchmarks %>%
     filter(version == "ML") %>%
-    select(`RAM(MB)`),
+    arrange(dataset) %>%
+    pull(`RAM(MB)`),
   benchmarks %>%
     filter(version == "R") %>%
-    select(`RAM(MB)`),
+    arrange(dataset) %>%
+    pull(`RAM(MB)`),
+  paired = T
 )
 
 # compare time
