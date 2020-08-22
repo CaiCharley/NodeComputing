@@ -35,10 +35,59 @@ rbenchmarks <- readRDS("rbenchmarks.rds") %>%
     version = "R"
   )
 
-# join and plot benchmarks
+# join benchmarks
 benchmarks <- bind_rows(rbenchmarks, mlbenchmarks) %>%
-  pivot_longer(c(`time(s)`, `RAM(MB)`), names_to = "type", values_to = "value")
+  filter(!is.na(`time(s)`) || !is.na(`RAM(MB)`))
 
-ggplot(benchmarks, aes(type, value)) +
+# calculate significance
+timesig <- t.test(
+  benchmarks %>%
+    filter(version == "ML") %>%
+    select(`time(s)`),
+  benchmarks %>%
+    filter(version == "R") %>%
+    select(`time(s)`),
+)
+
+ramsig <- t.test(
+  benchmarks %>%
+    filter(version == "ML") %>%
+    select(`RAM(MB)`),
+  benchmarks %>%
+    filter(version == "R") %>%
+    select(`RAM(MB)`),
+)
+
+# compare time
+ggplot(benchmarks, aes(version, `time(s)`, fill = version)) +
+  geom_boxplot() +
+  geom_point(alpha = 0.5, size = 1) +
+  geom_line(alpha = 0.5, aes(group = dataset)) +
+  ggtitle("Compare Elasped Runtime") +
+  labs(x = "PrInCE Version", y = "Time Elapsed (s)")
+
+ggsave("compare_time.png", width = 5, height = 5)
+
+# compare RAM
+ggplot(benchmarks, aes(version, `RAM(MB)`, fill = version)) +
+  geom_boxplot() +
+  geom_point(alpha = 0.5, size = 1) +
+  geom_line(alpha = 0.5, aes(group = dataset)) +
+  ylim(c(0, 6000)) + # !!!
+  ggtitle("Compare Peak RAM Usage") +
+  labs(x = "PrInCE Version", y = "Peak RAM Usage (MB)")
+
+ggsave("compare_RAM.png", width = 5, height = 5)
+
+# compare both
+benchmarks_pivot <- bind_rows(rbenchmarks, mlbenchmarks) %>%
+  pivot_longer(
+    c(`time(s)`, `RAM(MB)`),
+    names_to = "type",
+    values_to = "value"
+  ) %>%
+  filter(!is.na(value))
+
+ggplot(benchmarks_pivot, aes(type, value)) +
   geom_bar(stat = "identity", aes(fill = version)) +
   facet_wrap(~dataset)
