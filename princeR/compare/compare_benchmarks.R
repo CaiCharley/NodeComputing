@@ -23,12 +23,12 @@ mlbenchmarks <- map(files, ~ readbench(.)) %>%
     version = "ML",
     .keep = "unused"
   ) %>%
-  relocate(dataset, .before = 1) %>% 
+  relocate(dataset, .before = 1) %>%
   filter(!is.na(`time(s)`))
 
 # import R benchmarks
 rbenchmarks <- readRDS("rbenchmarks.rds") %>%
-  filter(str_detect(expr, "NB-nmodels=1$")) %>%
+  filter(str_detect(expr, "SVM-nmodels=1$")) %>%
   transmute(
     dataset = str_remove(expr, "-classifier.*"),
     `time(s)` = median,
@@ -72,7 +72,7 @@ ggplot(benchmarks, aes(version, `time(s)`, fill = version)) +
   geom_boxplot() +
   geom_point(alpha = 0.5, size = 1) +
   geom_line(alpha = 0.5, aes(group = dataset)) +
-  ggtitle("Compare Elasped Runtime") +
+  ggtitle("Compare Elasped Runtime (R-SVM)") +
   labs(x = "PrInCE Version", y = "Time Elapsed (s)")
 
 ggsave("compare_time.png", width = 5, height = 5)
@@ -83,7 +83,7 @@ ggplot(benchmarks, aes(version, `RAM(MB)`, fill = version)) +
   geom_point(alpha = 0.5, size = 1) +
   geom_line(alpha = 0.5, aes(group = dataset)) +
   ylim(c(0, 6000)) + # !!!
-  ggtitle("Compare Peak RAM Usage") +
+  ggtitle("Compare Peak RAM Usage (R-SVM)") +
   labs(x = "PrInCE Version", y = "Peak RAM Usage (MB)")
 
 ggsave("compare_RAM.png", width = 5, height = 5)
