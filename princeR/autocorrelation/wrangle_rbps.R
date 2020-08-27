@@ -1,5 +1,7 @@
 # wrangle RBP data
-
+source(
+  "C:/Users/Charley/OneDrive/git/NodeComputing/princeR/autocorrelation/wrangle_genekey.R"
+)
 setwd("D:/Downloads/foster/autocorrelation/RBP/")
 
 library(tidyverse)
@@ -35,6 +37,15 @@ castello2012 <- list.files(getwd(), "Castello") %>%
   filter(`mRNAbinding` == "mRNA-interactome", IdentifiedCL == "identified") %>%
   transmute(Gene = `Symbol`, Species = "Homo Sapiens")
 
+# orthogonal organic phase separation (OOPS) in all 3 cell lines
+quieroz2018 <- list.files(getwd(), "Queiroz") %>%
+  read_excel(sheet = "OOPS cell lines", skip = 1, n_max = 1838) %>%
+  filter(and(and(HEK293, MCF10A), U2OS)) %>%
+  transmute(Protein = Uniprot_ID, Species = "Homo Sapiens") %>%
+  left_join(key, by = "Protein") %>%
+  relocate(Gene, .before = 1) %>%
+  select(Gene, Species)
+
 # RICK RBPs
 bao2018 <- list.files(getwd(), "Bao") %>%
   read_excel(sheet = "Table 3i", skip = 2) %>%
@@ -56,8 +67,19 @@ rbps <- list(
   attract,
   baltz2012,
   castello2012,
+  quieroz2018,
   bao2018,
   beckmann2015
 ) %>%
   map(~ (.$Gene)) %>%
-  setNames(c("rbpdb", "attract"))
+  setNames(
+    c(
+      "rbpdb",
+      "attract",
+      "baltz2012",
+      "castello2012",
+      "quieroz2018",
+      "bao2018",
+      "beckmann2015"
+    )
+  )
