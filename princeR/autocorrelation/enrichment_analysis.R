@@ -23,13 +23,76 @@ humanauto <- autocors %>%
   )
 
 # run enrichment analysis
-calc_enrichment <- function(cor) {
+calc_enrichment <- function(cor, pathways) {
   fgsea(
-    rbps,
+    pathways,
     pull(cor, value, name = Gene),
     nperm = 10^6,
     scoreType = "neg"
   )
 }
 
-enrichment <- map(humanauto, ~ calc_enrichment(.))
+enrichment <- map(humanauto, ~ calc_enrichment(., rbps))
+
+# graph
+tidyenrichDB <- bind_rows(enrichment, .id = "replicate") %>%
+  filter(pathway %in% c("rbpdb", "attract"))
+tidyenrichHTS <- bind_rows(enrichment, .id = "replicate") %>%
+  filter(and(pathway != "rbpdb", pathway != "attract"))
+
+ggplot(tidyenrichDB, aes(replicate, -log10(pval))) +
+  geom_point(aes(color = pathway)) +
+  geom_hline(yintercept = -log10(0.05)) +
+  ylim(0, 7) +
+  scale_colour_discrete(name = "Database", labels = c("ATtRACT", "RBPDB")) +
+  ggtitle("1.a) P values for RBP Databases") +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+  )
+ggsave("RBP Database Enrichment.png", width = 5, height = 5)
+
+ggplot(tidyenrichHTS, aes(replicate, -log10(pval))) +
+  geom_point(aes(color = pathway)) +
+  geom_hline(yintercept = -log10(0.05)) +
+  ylim(0, 7) +
+  ggtitle("1.b) P values for HTS Databases") +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+  )
+ggsave("HTS Enrichment.png", width = 5, height = 5)
+
+# find how many times each protein occurs
+
+HTSRBPnames <- reduce(rbps[-c(1, 2)], union)
+
+HTSRBPntimes <- map(
+  HTSRBPnames,
+  function(x) {
+    map_lgl(
+      rbps,
+      function(y) {
+        x %in% y
+      }
+    ) %>%
+      sum()
+  }
+) %>%
+  setNames(HTSRBPnames)
+
+HTSRBP <- map(1:5, ~ HTSRBPntimes[HTSRBPntimes >= .] %>%
+  names()) %>%
+  setNames(paste0(1:5, "+"))
+
+# calculate enrichment
+enrichmentHTSn <- map(humanauto, ~ calc_enrichment(., HTSRBP)) %>%
+  bind_rows(.id = "replicate")
+
+# graph
+ggplot(enrichmentHTSn, aes(pathway, -log10(pval))) +
+  geom_point(aes(color = replicate)) +
+  geom_hline(yintercept = -log10(0.05)) +
+  ylim(0, 7) +
+  xlab("Times Found") +
+  ggtitle("2) P values for RBP Found Across Multiple HTS")
+
+ggsave("RBP across HTS.png", width = 5, height = 5)
