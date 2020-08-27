@@ -22,6 +22,13 @@ humanauto <- autocors %>%
       distinct(Gene, .keep_all = T)
   )
 
+# generate negative control pathway
+control <- pull(key, Gene) %>%
+  sample(1000)
+
+rbps <- c(rbps, list(control))
+names(rbps)[8] <- "Control"
+
 # run enrichment analysis
 calc_enrichment <- function(cor, pathways) {
   fgsea(
@@ -36,20 +43,27 @@ enrichment <- map(humanauto, ~ calc_enrichment(., rbps))
 
 # graph
 tidyenrichDB <- bind_rows(enrichment, .id = "replicate") %>%
-  filter(pathway %in% c("rbpdb", "attract"))
+  filter(pathway %in% c("rbpdb", "attract", "Control"))
+tidyenrichDB$pathway <- factor(tidyenrichDB$pathway,
+  levels = c("attract", "rbpdb", "Control")
+)
+
 tidyenrichHTS <- bind_rows(enrichment, .id = "replicate") %>%
-  filter(and(pathway != "rbpdb", pathway != "attract"))
+  filter(!(pathway %in% c("rbpdb", "attract")))
 
 ggplot(tidyenrichDB, aes(replicate, -log10(pval))) +
   geom_point(aes(color = pathway)) +
   geom_hline(yintercept = -log10(0.05)) +
   ylim(0, 7) +
-  scale_colour_discrete(name = "Database", labels = c("ATtRACT", "RBPDB")) +
+  scale_colour_discrete(
+    name = "Database",
+    labels = c("ATtRACT", "RBPDB", "Control")
+  ) +
   ggtitle("1.a) P values for RBP Databases") +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
   )
-ggsave("RBP Database Enrichment.png", width = 5, height = 5)
+ggsave("RBP Database Enrichment+ctrl.png", width = 5, height = 5)
 
 ggplot(tidyenrichHTS, aes(replicate, -log10(pval))) +
   geom_point(aes(color = pathway)) +
