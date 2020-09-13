@@ -8,7 +8,7 @@ library(pals)
 
 # load data as individual list element
 goldstd <- readRDS("goldstd.rds")
-file_names <- list.files(pattern = "[^goldstd.rds]")
+file_names <- list.files(pattern = "[^goldstd].rds")
 files <- map(file_names, ~ readRDS(.)) %>%
   setNames(str_replace(file_names, ".rds", "")) %>%
   unlist(recursive = F)
