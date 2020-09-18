@@ -1,6 +1,6 @@
 # compare time and RAM usage of MatLab and R PrInCE
 
-setwd("D://Downloads/foster/mlbench/")
+setwd("D://Downloads/foster/benchmarks/")
 library(tidyverse)
 library(magrittr)
 
