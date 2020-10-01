@@ -63,7 +63,7 @@ rnase <- mats[str_detect(names(mats), "control", negate = T)]
 map_auto <- function(ctrl, rnase) {
   map2(
     ctrl, rnase,
-    ~ autocorrelation(.x, .y) %>%
+    ~ calculate_autocorrelation(.x, .y) %>%
       sort()
   )
 }
