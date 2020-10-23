@@ -41,16 +41,28 @@ output_filename <- paste0(
   condnames, # conditions
   ".csv"     # file type
 )
+runtime_filename <- paste0(
+  dataname,  # input file
+  condnames, # conditions
+  "-runtime.csv"     # file type
+)``
+
 output_file <- file.path(args$output_dir, output_filename)
+runtime_file <- file.path(args$output_dir, runtime_filename)
 
 # results
 results <- PrInCE(dataset,
   goldstd,
   classifier = args$classifier,
-  models = args$nmodels
+  models = args$nmodels,
+  runtime = T
 )
+
+# runtime
+runtime <- attributes(results)[-3:-1]
 
 # write out
 write.csv(results, file = output_file)
+write.csv(runtime, file = runtime_file)
 system(paste("gzip --force", output_file))
 message("Done")

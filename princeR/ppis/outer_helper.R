@@ -12,7 +12,7 @@ get_inputs <- function() {
 get_options <- function() {
   list(
     input_file = input_files, # make sure input_file is first
-    classifier = c("NB", "SVM", "RF", "LR", "ensemble"),
+    classifier = c("NB", "SVM", "LR", "ensemble"),
     nmodels = c(1)
   )
 }
@@ -20,15 +20,15 @@ get_options <- function() {
 # make job specific modifications to default grid
 # tibble -> tibble
 modify_grid <- function(tbl) {
-   tbl
+  tbl
 }
 
 # checks to see if job is done
 # list -> boolean
 job_done <- function(job) {
   input_filename <- job[["input_file"]] %>%
-      basename() %>%
-      gsub("\\.rds$", "", .) # ! input file type
+    basename() %>%
+    gsub("\\.rds$", "", .) # ! input file type
   expected_output <-
     paste0(
       input_filename,
