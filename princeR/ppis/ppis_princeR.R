@@ -31,21 +31,21 @@ conditions <- args[grep("input_file|output_dir", names(args), invert = T)]
 condnames <- ""
 for (i in seq_len(length(conditions))) {
   condnames <- paste0(
-    condnames, "-",   # conditions will be listed alphabetically
+    condnames, "-", # conditions will be listed alphabetically
     names(conditions)[i], "=",
     conditions[i]
   )
 }
 output_filename <- paste0(
-  dataname,  # input file
+  dataname, # input file
   condnames, # conditions
-  ".csv"     # file type
+  ".csv" # file type
 )
 runtime_filename <- paste0(
-  dataname,  # input file
+  dataname, # input file
   condnames, # conditions
-  "-runtime.csv"     # file type
-)``
+  "-runtime.csv" # file type
+)
 
 output_file <- file.path(args$output_dir, output_filename)
 runtime_file <- file.path(args$output_dir, runtime_filename)
