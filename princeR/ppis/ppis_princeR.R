@@ -59,7 +59,7 @@ results <- PrInCE(dataset,
 )
 
 # runtime
-runtime <- attributes(results)[-5:-1]
+runtime <- attributes(results)[-3:-1]
 
 # write out
 write.csv(results, file = output_file)
